@@ -23,16 +23,16 @@ public class User {
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private UserType userType;
+    private Role role;
 
     public User() {
     }
 
-    public User(String username, String password, String email, UserType userType) {
+    public User(String username, String password, String email, Role role) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.userType = userType;
+        this.role = role;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", userType=" + userType +
+                ", userType=" + role +
                 '}';
     }
 }

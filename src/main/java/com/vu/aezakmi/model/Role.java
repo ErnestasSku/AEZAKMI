@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-public class UserType {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,10 +23,10 @@ public class UserType {
 
 //    TODO: This should also have permissions. Either a class or an enum
 
-    public UserType() {
+    public Role() {
     }
 
-    public UserType(String name) {
+    public Role(String name) {
         this.name = name;
     }
 
