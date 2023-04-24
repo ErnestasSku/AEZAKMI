@@ -18,7 +18,7 @@ public class Role {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "userType")
+    @OneToMany(mappedBy = "role")
     private List<User> users;
 
 //    TODO: This should also have permissions. Either a class or an enum
@@ -33,7 +33,7 @@ public class Role {
 
     @Override
     public String toString() {
-        return "UserType{" +
+        return "Role{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
