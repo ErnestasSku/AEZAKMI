@@ -1,22 +1,25 @@
-import { Outlet, Link } from 'react-router-dom';
+import { AppBar, Box, MenuItem, Toolbar } from '@mui/material';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Layout = () => {
+const PAGES = ['Home', 'Users'];
+
+const Layout: React.FC = () => {
   return (
-    <>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/users">Users</Link>
-          </li>
-        </ul>
-      </nav>
-
-      <Outlet />
-    </>
+    <AppBar position="static">
+      <Toolbar>
+        {PAGES.map(page => (
+          <MenuItem key={page}>
+            <Link
+              style={{ textDecoration: 'none', color: 'white' }}
+              to={`/${page}`}
+            >
+              {page}
+            </Link>
+          </MenuItem>
+        ))}
+      </Toolbar>
+    </AppBar>
   );
 };
-
 export default Layout;
