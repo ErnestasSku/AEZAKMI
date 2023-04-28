@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,8 +31,6 @@ public class Video {
     @OneToMany(mappedBy = "video")
     private List<Comment> comments;
 
-
     @ManyToMany
     private List<Tag> tags;
-
 }

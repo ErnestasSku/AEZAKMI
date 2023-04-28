@@ -24,4 +24,8 @@ public class VideoService {
     public Optional<Video> getVideoById(Long id) {
         return videoRepository.findById(id);
     }
+
+    public void updateVideo(Video video) {
+        videoRepository.save(video);
+    }
 }
