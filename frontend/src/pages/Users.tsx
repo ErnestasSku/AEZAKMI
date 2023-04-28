@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import logo from '../../assets/logo.svg';
+import logo from '../assets/logo.svg';
 
 interface User {
   id: number;
@@ -10,7 +10,7 @@ interface User {
   role_id: unknown;
 }
 
-export const Users: React.FC = () => {
+const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
@@ -36,3 +36,4 @@ export const Users: React.FC = () => {
     </header>
   );
 };
+export default Users;
