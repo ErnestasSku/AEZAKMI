@@ -24,4 +24,8 @@ public class CourseService {
     public Optional<Course> getCourseById(Long id) {
         return courseRepository.findById(id);
     }
+
+    public void updateCourse(Course course) {
+        courseRepository.save(course);
+    }
 }

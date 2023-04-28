@@ -24,6 +24,7 @@ public class Video {
     @Column(nullable = false)
     private String videoUrl;
 
+//    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
