@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import logo from '../../logo.svg'
+import logo from '../../assets/logo.svg'
 
 interface User {
     id: number;
@@ -15,7 +15,7 @@ export const Users: React.FC = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const response = await fetch('/users');
+            const response = await fetch('/api/users');
             const body = await response.json();
             setUsers(body);
         }
