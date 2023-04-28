@@ -1,39 +1,38 @@
+import { Person } from '@mui/icons-material';
+import { List, ListItem, ListItemIcon, Typography } from '@mui/material';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import logo from '../assets/logo.svg';
-
-interface User {
-  id: number;
-  email: string;
-  password: string;
-  username: string;
-  role_id: unknown;
-}
+import { User, fetchAllUsers } from '../api';
 
 const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch('/api/users');
-      const body = await response.json();
-      setUsers(body);
+      const { data } = await fetchAllUsers();
+      setUsers(data);
     }
     fetchData();
   }, []);
 
   return (
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <div className="App-intro">
-        <h2>Users</h2>
+    <>
+      <Typography variant="h4">All Registered Users</Typography>
+      <List style={{ display: 'flex', flexDirection: 'column' }}>
         {users.map(user => (
-          <div key={user.id}>
-            {user.username} ({user.email})
-          </div>
+          <ListItem
+            key={user.id}
+            alignItems="center"
+            style={{ justifyContent: 'center' }}
+          >
+            <ListItemIcon sx={{ color: 'white' }}>
+              <Person />
+            </ListItemIcon>
+            {user.username} ({user.email} {user.password})
+          </ListItem>
         ))}
-      </div>
-    </header>
+      </List>
+    </>
   );
 };
 export default Users;
