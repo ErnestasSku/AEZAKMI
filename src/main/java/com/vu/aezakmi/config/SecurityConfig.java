@@ -27,7 +27,7 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable()) // (1)
                 .headers(headers -> headers.frameOptions().disable())
-                .authorizeRequests( auth -> auth
+                .authorizeHttpRequests( auth -> auth
                         .anyRequest().authenticated() // (2)
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // (3)
