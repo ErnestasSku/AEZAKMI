@@ -15,8 +15,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true)
+    private RoleType type;
 
     @OneToMany(mappedBy = "role")
     private List<User> users;
@@ -26,17 +27,14 @@ public class Role {
     public Role() {
     }
 
-    public Role(String name) {
-        this.name = name;
-    }
-
 
     @Override
     public String toString() {
         return "Role{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", type='" + type.toString() + '\'' +
                 '}';
     }
 
 }
+
