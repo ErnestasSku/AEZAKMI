@@ -1,27 +1,33 @@
 package com.vu.aezakmi.service;
 
 import com.vu.aezakmi.model.Role;
+import com.vu.aezakmi.model.RoleType;
 import com.vu.aezakmi.repository.RoleRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class RoleService {
+    private final RoleRepository roleRepository;
+
     @Autowired
-    RoleRepository roleRepository;
-
-    public void create(Role role) {
-        roleRepository.save(role);
+    public RoleService(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
     }
 
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
-    }
+    @PostConstruct
+    public void init() {
+        Role adminRole = new Role();
+        adminRole.setType(RoleType.ADMIN);
+        roleRepository.save(adminRole);
 
-    public Optional<Role> getRoleById(Long id) {
-        return roleRepository.findById(id);
+        Role teacherRole = new Role();
+        teacherRole.setType(RoleType.TEACHER);
+        roleRepository.save(teacherRole);
+
+        Role userRole = new Role();
+        userRole.setType(RoleType.USER);
+        roleRepository.save(userRole);
     }
 }
