@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,6 +24,7 @@ public class Video {
     @Column(nullable = false)
     private String videoUrl;
 
+//    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
@@ -32,8 +32,6 @@ public class Video {
     @OneToMany(mappedBy = "video")
     private List<Comment> comments;
 
-
     @ManyToMany
     private List<Tag> tags;
-
 }
