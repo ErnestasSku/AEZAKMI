@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import styles from './registration.module.css';
+import styles from './registration-form.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { TermsAndConditions } from './TermsAndConditions';
