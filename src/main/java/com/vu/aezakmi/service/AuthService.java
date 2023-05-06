@@ -7,12 +7,16 @@ import com.vu.aezakmi.model.User;
 import com.vu.aezakmi.repository.RoleRepository;
 import com.vu.aezakmi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthService(UserRepository userRepository, RoleRepository roleRepository) {
@@ -26,7 +30,7 @@ public class AuthService {
 
         User user = new User();
         user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEmail(userDto.getEmail());
         user.setRole(userRole);
 
