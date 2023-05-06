@@ -26,6 +26,7 @@ export const RegistrationForm = () => {
     useState(false);
   const {
     handleSubmit,
+    watch,
     control,
     formState: { errors },
   } = useForm<FormData>({
@@ -98,7 +99,13 @@ export const RegistrationForm = () => {
           <Controller
             name="username"
             control={control}
-            rules={{ required: 'Username is required' }}
+            rules={{
+              required: 'Username is required',
+              minLength: {
+                value: 3,
+                message: 'Username has to be at least 3 characters long',
+              },
+            }}
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
@@ -133,7 +140,13 @@ export const RegistrationForm = () => {
           <Controller
             name="password"
             control={control}
-            rules={{ required: 'Password is required' }}
+            rules={{
+              required: 'Password is required',
+              minLength: {
+                value: 3,
+                message: 'Password has to be at least 3 characters long',
+              },
+            }}
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
@@ -149,7 +162,12 @@ export const RegistrationForm = () => {
           <Controller
             name="confirmPassword"
             control={control}
-            rules={{ required: 'Confirm password is required' }}
+            rules={{
+              required: 'Confirm password is required',
+              validate: value => {
+                return value === watch('password') || 'Passwords do not match';
+              },
+            }}
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
