@@ -9,20 +9,22 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @RestController
 @RequestMapping("/api")
 public class AuthController {
     private final AuthService authService;
     private final TokenService tokenService;
+    private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
 
-
-
     @Autowired
-    public AuthController(AuthService authService, TokenService tokenService, AuthenticationManager authenticationManager) {
+    public AuthController(AuthService authService, TokenService tokenService, UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
         this.authService = authService;
         this.tokenService = tokenService;
+        this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
     }
 
@@ -33,7 +35,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@RequestBody LoginDto userLogin) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLogin.getUsername(), userLogin.getPassword()));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userLogin.getUsername());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, userLogin.getPassword(), userDetails.getAuthorities());
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
         return tokenService.generateToken(authentication);
     }
 }
