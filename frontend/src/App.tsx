@@ -7,6 +7,7 @@ import NoPage from './pages/NoPage';
 import Courses from './pages/Courses';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Login from './pages/Login';
+import Registration from './pages/Registration';
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="users" element={<Users />} />
           <Route path="courses" element={<Courses />} />
           <Route path="login" element={<Login />} />
+          <Route path="registration" element={<Registration />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
