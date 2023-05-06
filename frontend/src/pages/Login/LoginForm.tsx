@@ -15,7 +15,7 @@ type FormData = {
   rememberMe: boolean;
 };
 
-export const SignInForm = () => {
+export const LoginForm = () => {
   const { handleSubmit, control } = useForm<FormData>({
     defaultValues: { email: '', password: '', rememberMe: false },
   });
@@ -33,7 +33,11 @@ export const SignInForm = () => {
         borderRadius: '5px',
       }}
     >
-      <Typography padding="20px 0px 30px 0px" variant="h4">
+      <Typography
+        padding="20px 0px 30px 0px"
+        variant="h4"
+        fontFamily="Roboto Slab"
+      >
         Sign in
       </Typography>
 
@@ -105,17 +109,16 @@ export const SignInForm = () => {
               Forgot password?
             </Typography>
           </div>
-          <Container style={{ marginTop: '0px' }}>
+          <Container style={{ marginTop: '8px' }}>
             <Button
               type="submit"
               style={{
-                fontWeight: '400',
                 padding: '5px 40px',
                 borderRadius: '5px',
                 border: '1px solid grey',
-                backgroundColor: 'lightgrey',
-                color: 'black',
-                maxWidth: '50px',
+                backgroundColor: '#1976d2',
+                color: 'white',
+                fontSize: '18px',
                 textTransform: 'none',
               }}
             >
@@ -131,7 +134,6 @@ export const SignInForm = () => {
             display: 'inline',
             fontSize: '14px',
             fontWeight: 'lighter',
-            cursor: 'pointer',
           }}
         >
           Not a member yet?
@@ -144,7 +146,7 @@ export const SignInForm = () => {
             cursor: 'pointer',
           }}
         >
-          <Link to="/home">Create account now!</Link>
+          <Link to="/registration">Create account now!</Link>
         </Typography>
       </div>
     </Container>

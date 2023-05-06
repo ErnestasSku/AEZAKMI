@@ -1,5 +1,5 @@
 import { Container, Grid, Stack, Typography } from '@mui/material';
-import { SignInForm } from './SigninForm';
+import { LoginForm } from './LoginForm';
 
 const Login = () => {
   return (
@@ -30,14 +30,17 @@ const Login = () => {
                   }}
                   src="https://cdn.logojoy.com/wp-content/uploads/2018/05/01144812/1863-768x591.png"
                 ></img>
-                <Typography variant="h3" style={{ textAlign: 'left' }}>
+                <Typography
+                  variant="h3"
+                  style={{ textAlign: 'left', fontFamily: 'Roboto Slab' }}
+                >
                   Education sharing for everyone
                 </Typography>
               </Stack>
             </Container>
           </Grid>
           <Grid item xs={5}>
-            <SignInForm />
+            <LoginForm />
           </Grid>
         </Grid>
       </Grid>
