@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import Users from './pages/Users';
 import Home from './pages/Home';
@@ -17,6 +17,7 @@ function App() {
         <Layout />
         <Routes>
           <Route index path="/" element={<Home />} />
+          <Route path="/home" element={<Navigate to="/" />} />
           <Route path="users" element={<Users />} />
           <Route path="courses" element={<Courses />} />
           <Route path="login" element={<Login />} />

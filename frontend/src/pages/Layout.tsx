@@ -1,5 +1,5 @@
 import { Person } from '@mui/icons-material';
-import { AppBar, Button, IconButton, MenuItem, Toolbar } from '@mui/material';
+import { AppBar, MenuItem, Toolbar } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ const Layout: React.FC = () => {
             <MenuItem key={page}>
               <Link
                 style={{ textDecoration: 'none', color: 'white' }}
-                to={`/${page === 'Home' ? '' : page}`}
+                to={page.toLowerCase()}
               >
                 {page}
               </Link>
