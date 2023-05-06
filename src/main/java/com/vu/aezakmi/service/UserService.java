@@ -1,5 +1,6 @@
 package com.vu.aezakmi.service;
 
+import com.vu.aezakmi.dto.UserDto;
 import com.vu.aezakmi.model.User;
 import com.vu.aezakmi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getUsers() {
+        return userRepository.findAllWithRoles();
     }
 }
