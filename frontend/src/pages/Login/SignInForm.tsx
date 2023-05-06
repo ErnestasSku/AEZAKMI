@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 type FormData = {
   email: string;
@@ -70,7 +71,6 @@ export const SignInForm = () => {
                 variant="outlined"
                 label="Password"
                 type="password"
-                autoFocus
                 helperText={error ? error.message : null}
               />
             )}
@@ -137,7 +137,6 @@ export const SignInForm = () => {
           Not a member yet?
         </Typography>
         <Typography
-          component={'a'}
           style={{
             marginLeft: '4px',
             display: 'inline',
@@ -145,7 +144,7 @@ export const SignInForm = () => {
             cursor: 'pointer',
           }}
         >
-          Create account now!
+          <Link to="/home">Create account now!</Link>
         </Typography>
       </div>
     </Container>

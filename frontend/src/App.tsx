@@ -16,8 +16,8 @@ function App() {
       <BrowserRouter>
         <Layout />
         <Routes>
-          <Route index path="/" element={<Home />} />
-          <Route path="/home" element={<Navigate to="/" />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Navigate to="/home" />} />
           <Route path="users" element={<Users />} />
           <Route path="courses" element={<Courses />} />
           <Route path="login" element={<Login />} />
