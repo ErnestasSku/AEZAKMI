@@ -1,5 +1,6 @@
 package com.vu.aezakmi.controller;
 
+import com.vu.aezakmi.dto.CourseDto;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.Video;
 import com.vu.aezakmi.service.CourseService;
@@ -28,7 +29,7 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<Course> getAllCourses() {
+    public List<CourseDto> getAllCourses() {
         return courseService.getAllCourses();
     }
 
