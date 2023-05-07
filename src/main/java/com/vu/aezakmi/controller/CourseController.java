@@ -34,8 +34,8 @@ public class CourseController {
     }
 
     @GetMapping("{id}")
-    public Course getCourseById(@PathVariable Long id) {
-        return courseService.getCourseById(id).orElse(null);
+    public CourseDto getCourseById(@PathVariable Long id) {
+        return courseService.getCourseByIdWithCreatorId(id).orElse(null);
     }
 
     @PatchMapping("{courseId}/video/{videoId}")

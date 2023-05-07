@@ -22,6 +22,10 @@ public class CourseService {
         return courseRepository.findAllWithCreatorIds();
     }
 
+    public Optional<CourseDto> getCourseByIdWithCreatorId(Long id) {
+        return courseRepository.findByIdWithCreatorId(id);
+    }
+
     public Optional<Course> getCourseById(Long id) {
         return courseRepository.findById(id);
     }
