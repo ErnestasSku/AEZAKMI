@@ -1,10 +1,9 @@
 package com.vu.aezakmi.service;
 
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -14,9 +13,11 @@ import java.util.stream.Collectors;
 @Service
 public class TokenService {
     private final JwtEncoder encoder;
+    private final JwtDecoder decoder;
 
-    public TokenService(JwtEncoder encoder) {
+    public TokenService(JwtEncoder encoder, JwtDecoder decoder) {
         this.encoder = encoder;
+        this.decoder = decoder;
     }
 
     public String generateToken(Authentication
@@ -34,4 +35,23 @@ public class TokenService {
                 .build();
         return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
+
+    public boolean validate(String token) {
+        try {
+            Jwt jwt = this.decoder.decode(token);
+            return true;
+        } catch (Exception e) {
+            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
+        }
+    }
+
+    public String getUsernameFromToken(String token) {
+        try {
+            Jwt jwt = this.decoder.decode(token);
+            return jwt.getSubject();
+        } catch (Exception e) {
+            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
+        }
+    }
+
 }
