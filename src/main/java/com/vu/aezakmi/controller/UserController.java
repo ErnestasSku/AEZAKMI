@@ -1,6 +1,7 @@
 package com.vu.aezakmi.controller;
 
-import com.vu.aezakmi.dto.UserDto;
+import com.vu.aezakmi.dto.UserGetDto;
+import com.vu.aezakmi.dto.UserPostDto;
 import com.vu.aezakmi.model.User;
 import com.vu.aezakmi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,19 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public void saveUser(@RequestBody User user) {
+    public void saveUser(@RequestBody UserPostDto userpostDto) {
+        User user = new User();
+        user.setUsername(userpostDto.getUsername());
+        user.setPassword(userpostDto.getPassword());
+        user.setEmail(userpostDto.getEmail());
+
+        // TODO create role controller, service, repo and set the role here
+
         userService.save(user);
     }
 
     @GetMapping
-    public List<UserDto> getUsers() {
+    public List<UserGetDto> getUsers() {
         return userService.getUsers();
     }
 }
