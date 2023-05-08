@@ -20,15 +20,8 @@ public class RoleService {
     }
 
     public void updateRole(Long userId, RoleType roleType) {
-        Role adminRole = roleRepository.findByType(RoleType.ADMIN)
-                .orElseThrow(() -> new RuntimeException("Admin role not found"));
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (!user.getRole().equals(adminRole)) {
-            throw new RuntimeException("Only admin can update user roles");
-        }
 
         Role role = roleRepository.findByType(roleType)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
