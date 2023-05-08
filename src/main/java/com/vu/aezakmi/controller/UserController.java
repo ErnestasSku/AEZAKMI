@@ -1,5 +1,6 @@
 package com.vu.aezakmi.controller;
 
+import com.vu.aezakmi.dto.UserDto;
 import com.vu.aezakmi.model.User;
 import com.vu.aezakmi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers() {
+    public List<UserDto> getUsers() {
         return userService.getUsers();
     }
 }
