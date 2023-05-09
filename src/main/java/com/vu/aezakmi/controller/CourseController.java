@@ -4,6 +4,7 @@ import com.vu.aezakmi.dto.CourseDto;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.Video;
 import com.vu.aezakmi.service.CourseService;
+import com.vu.aezakmi.service.UserService;
 import com.vu.aezakmi.service.VideoService;
 import com.vu.aezakmi.utils.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,17 @@ public class CourseController {
     @Autowired
     private VideoService videoService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping
-    public void createCourse(@RequestBody Course course) {
+    public void createCourse(@RequestBody CourseDto courseDto) {
+        Course course = new Course();
+        course.setName(courseDto.getName());
+        course.setDescription(courseDto.getDescription());
+
+        userService.getUserById(courseDto.getCreatorId()).ifPresent(course::setCreator);
+
         courseService.create(course);
     }
 

@@ -7,9 +7,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseDto {
+public class VideoDto {
+
     private Long id;
-    private String name;
+
+    private String title;
+
     private String description;
-    private Long creatorId;
+
+    private String videoUrl;
+
+    private Long courseId;
 }
+

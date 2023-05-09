@@ -1,5 +1,6 @@
 package com.vu.aezakmi.controller;
 
+import com.vu.aezakmi.dto.VideoDto;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.Video;
 import com.vu.aezakmi.service.CourseService;
@@ -20,7 +21,14 @@ public class VideoController {
     private CourseService courseService;
 
     @PostMapping
-    public void uploadVideo(@RequestBody Video video) {
+    public void uploadVideo(@RequestBody VideoDto videoDto) {
+        Video video = new Video();
+        video.setTitle(videoDto.getTitle());
+        video.setDescription(videoDto.getDescription());
+        video.setVideoUrl(videoDto.getVideoUrl());
+
+        courseService.getCourseById(videoDto.getCourseId()).ifPresent(video::setCourse);
+
         videoService.upload(video);
     }
 
