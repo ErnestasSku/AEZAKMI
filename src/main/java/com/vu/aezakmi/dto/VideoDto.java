@@ -15,8 +15,6 @@ public class VideoDto {
 
     private String description;
 
-    private String videoUrl;
-
     private Long courseId;
 }
 

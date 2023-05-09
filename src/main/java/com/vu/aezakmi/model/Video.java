@@ -21,8 +21,8 @@ public class Video {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private String videoUrl;
+    @Lob
+    private byte[] data;
 
 //    @JsonManagedReference
     @ManyToOne

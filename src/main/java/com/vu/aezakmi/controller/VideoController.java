@@ -1,6 +1,6 @@
 package com.vu.aezakmi.controller;
 
-import com.vu.aezakmi.dto.VideoDto;
+import com.vu.aezakmi.multipartRequest.VideoUploadRequest;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.Video;
 import com.vu.aezakmi.service.CourseService;
@@ -8,6 +8,7 @@ import com.vu.aezakmi.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -21,15 +22,14 @@ public class VideoController {
     private CourseService courseService;
 
     @PostMapping
-    public void uploadVideo(@RequestBody VideoDto videoDto) {
+    public void uploadVideo(@ModelAttribute VideoUploadRequest videoUploadRequest) throws IOException {
         Video video = new Video();
-        video.setTitle(videoDto.getTitle());
-        video.setDescription(videoDto.getDescription());
-        video.setVideoUrl(videoDto.getVideoUrl());
+        video.setTitle(videoUploadRequest.getVideoDto().getTitle());
+        video.setDescription(videoUploadRequest.getVideoDto().getDescription());
 
-        courseService.getCourseById(videoDto.getCourseId()).ifPresent(video::setCourse);
+        courseService.getCourseById(videoUploadRequest.getVideoDto().getCourseId()).ifPresent(video::setCourse);
 
-        videoService.upload(video);
+        videoService.upload(video, videoUploadRequest.getFile());
     }
 
     @GetMapping
