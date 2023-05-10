@@ -11,3 +11,10 @@ export interface RegisterUserRequest {
   email: string;
   password: string;
 }
+
+export interface Video {
+  id: string;
+  title: string;
+  description: string;
+  data: unknown;
+}

@@ -3,7 +3,7 @@ import { AppBar, MenuItem, Toolbar } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const PAGES = ['Home', 'Courses', 'Users'];
+const PAGES = ['Home', 'Courses', 'Users', 'Videos'];
 
 const Layout: React.FC = () => {
   return (
