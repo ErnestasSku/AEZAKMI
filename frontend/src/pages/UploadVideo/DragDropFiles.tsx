@@ -1,14 +1,15 @@
 import { Delete, UploadFile } from '@mui/icons-material';
-import { Button, Container, IconButton } from '@mui/material';
+import { Button, Container, FormHelperText, IconButton } from '@mui/material';
 import { useRef } from 'react';
 import { DragEvent } from 'react';
 
 interface Props {
   file: File | null;
   setFile: (file: File | null) => void;
+  error?: string;
 }
 
-export const DragDropFiles = ({ file, setFile }: Props) => {
+export const DragDropFiles = ({ file, setFile, error }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = (event: DragEvent) => {
@@ -21,76 +22,89 @@ export const DragDropFiles = ({ file, setFile }: Props) => {
   };
 
   return (
-    <Container style={{ display: 'flex', justifyContent: 'center' }}>
-      <div
-        style={{
-          outline: '2px dashed black',
-          padding: '10px',
-          width: '60vw',
-          height: '60vh',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
+    <>
+      <Container
+        style={{ display: 'flex', justifyContent: 'center', padding: 0 }}
       >
-        <Container
+        <div
           style={{
+            outline: '2px dashed black',
+            outlineColor: error ? 'red' : 'black',
+            padding: '10px',
+            width: '100%',
+            height: '60vh',
             display: 'flex',
-            flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center',
           }}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
         >
-          <UploadFile style={{ fontSize: '3em' }} />
-          <div style={{ fontSize: '1.5em' }}>
-            <p style={{ margin: '10px 0 0 0' }}>Drag and Drop video here</p>
-            <p style={{ margin: '0 0 10px 0' }}>or</p>
-          </div>
-          <input
-            hidden
-            ref={inputRef}
-            type="file"
-            accept="video/mp4"
-            onChange={event => {
-              if (!event.target.files?.length) return;
-              setFile(event.target.files?.[0]);
-              event.target.value = '';
-            }}
-          />
-          <Button onClick={() => inputRef.current?.click()} variant="contained">
-            Select file (.mp4)
-          </Button>
-          <div
+          <Container
             style={{
-              backgroundColor: 'lightgray',
-              borderRadius: '10px',
-              fontWeight: 'lighter',
-              padding: '0px 20px',
-              marginTop: '16px',
-              color: 'black',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
-            {file ? (
-              <>
-                <p style={{ display: 'inline-block' }}>
-                  {file.name} ({formatBytes(file.size)})
-                </p>
-                <IconButton
-                  onClick={() => setFile(null)}
-                  size="small"
-                  style={{ marginLeft: '10px' }}
-                >
-                  <Delete />
-                </IconButton>
-              </>
-            ) : (
-              <p>None selected...</p>
-            )}
-          </div>
-        </Container>
-      </div>
-    </Container>
+            <UploadFile style={{ fontSize: '3em' }} />
+            <div style={{ fontSize: '1.5em' }}>
+              <p style={{ margin: '10px 0 0 0' }}>Drag and Drop video here</p>
+              <p style={{ margin: '0 0 10px 0' }}>or</p>
+            </div>
+            <input
+              hidden
+              ref={inputRef}
+              type="file"
+              accept="video/mp4"
+              onChange={event => {
+                if (!event.target.files?.length) return;
+                setFile(event.target.files?.[0]);
+                event.target.value = '';
+              }}
+            />
+            <Button
+              onClick={() => inputRef.current?.click()}
+              variant="contained"
+            >
+              Select file (.mp4)
+            </Button>
+            <div
+              style={{
+                backgroundColor: 'lightgray',
+                borderRadius: '10px',
+                fontWeight: 'lighter',
+                padding: '0px 20px',
+                marginTop: '16px',
+                color: 'black',
+              }}
+            >
+              {file ? (
+                <>
+                  <p style={{ display: 'inline-block' }}>
+                    {file.name} ({formatBytes(file.size)})
+                  </p>
+                  <IconButton
+                    onClick={() => setFile(null)}
+                    size="small"
+                    style={{ marginLeft: '10px' }}
+                  >
+                    <Delete />
+                  </IconButton>
+                </>
+              ) : (
+                <p>None selected...</p>
+              )}
+            </div>
+          </Container>
+        </div>
+      </Container>
+      {error && (
+        <FormHelperText style={{ marginTop: 8 }} error>
+          {error}
+        </FormHelperText>
+      )}
+    </>
   );
 };
 

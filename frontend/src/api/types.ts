@@ -15,6 +15,12 @@ export interface RegisterUserRequest {
 export interface Video {
   id: string;
   title: string;
-  description: string;
+  description?: string;
+  data: Blob;
+}
+
+export interface UploadVideoRequest {
+  title: string;
+  description?: string;
   data: Blob;
 }
