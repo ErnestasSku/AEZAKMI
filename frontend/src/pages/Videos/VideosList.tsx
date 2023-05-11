@@ -1,11 +1,11 @@
 import { List, ListItem } from '@mui/material';
 import { VideoPreview } from './VideoPreview';
-import { fetchAllVideos } from '../../api';
+import { fetchAllVideoPreviews } from '../../api';
 import { useQuery } from 'react-query';
 import { convertArrayToChunks } from '../../utils/array';
 
 export const VideosList = ({}) => {
-  const { data, isLoading } = useQuery('videos', fetchAllVideos);
+  const { data, isLoading } = useQuery('videos', fetchAllVideoPreviews);
 
   const chunks = convertArrayToChunks(data?.data, 3);
 

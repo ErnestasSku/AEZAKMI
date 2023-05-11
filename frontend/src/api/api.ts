@@ -5,4 +5,6 @@ export const fetchAllUsers = () => axios.get<unknown, { data: User[] }>('/api/us
 
 export const registerUser = (request: RegisterUserRequest) => axios.post('/api/users', request)
 
-export const fetchAllVideos = () => axios.get<unknown, { data: Video[] }>('/api/videos');
+export const fetchAllVideoPreviews = () => axios.get<unknown, { data: Video[] }>('/api/videos');
+
+export const fetchVideo = (id: string) => axios.get<unknown, { data: Video }>(`/api/videos/${id}`);

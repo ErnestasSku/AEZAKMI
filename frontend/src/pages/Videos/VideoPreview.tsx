@@ -8,7 +8,7 @@ interface Props {
 
 export const VideoPreview = ({ video }: Props) => {
   return (
-    <Link to="/">
+    <Link to={`${video.id}`}>
       <Container>
         <img
           width="100%"
