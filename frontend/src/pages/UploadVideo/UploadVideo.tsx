@@ -1,3 +1,10 @@
+import { UploadVideoForm } from './UploadVideoForm';
+
 export const UploadVideo = () => {
-  return <div>Upload Video</div>;
+  return (
+    <>
+      {/* <Typography variant="h4">Upload video</Typography> */}
+      <UploadVideoForm />
+    </>
+  );
 };
