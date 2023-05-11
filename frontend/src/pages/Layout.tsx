@@ -1,5 +1,5 @@
-import { Person } from '@mui/icons-material';
-import { AppBar, MenuItem, Toolbar } from '@mui/material';
+import { Person, VideoCameraBack } from '@mui/icons-material';
+import { AppBar, Button, MenuItem, Toolbar } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -21,12 +21,23 @@ const Layout: React.FC = () => {
             </MenuItem>
           ))}
         </div>
-        <Link
-          to={'/login'}
-          style={{ outline: 0, color: 'white', display: 'flex' }}
-        >
-          <Person>Login</Person>
-        </Link>
+        <div style={{ display: 'flex', alignContent: 'center', gap: '30px' }}>
+          <Link to={'/videos/upload'}>
+            <Button
+              style={{ backgroundColor: 'white', color: 'black' }}
+              variant="contained"
+              startIcon={<VideoCameraBack />}
+            >
+              Upload video
+            </Button>
+          </Link>
+          <Link
+            to={'/login'}
+            style={{ outline: 0, color: 'white', display: 'flex' }}
+          >
+            <Person>Login</Person>
+          </Link>
+        </div>
       </Toolbar>
     </AppBar>
   );

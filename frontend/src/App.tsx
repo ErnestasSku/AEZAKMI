@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import Videos, { VideoView } from './pages/Videos';
+import UploadVideo from './pages/UploadVideo';
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="registration" element={<Registration />} />
           <Route path="/videos" element={<Videos />} />
           <Route path="videos/:id" element={<VideoView />} />
+          <Route path="/videos/upload" element={<UploadVideo />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
