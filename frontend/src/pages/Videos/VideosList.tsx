@@ -18,9 +18,12 @@ export const VideosList = ({}) => {
       ) : (
         <>
           {chunks.map((chunk, index) => (
-            <ListItem key={index} style={{ justifyContent: 'space-around' }}>
+            <ListItem key={index}>
               {chunk.map(video => (
-                <VideoPreview key={video.id} video={video} />
+                // Fix small space at the end of the row
+                <div style={{ width: '33%' }}>
+                  <VideoPreview key={video.id} video={video} />
+                </div>
               ))}
             </ListItem>
           ))}
