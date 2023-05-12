@@ -1,4 +1,4 @@
-package com.vu.aezakmi.controller.dto;
+package com.vu.aezakmi.dto;
 
 import com.vu.aezakmi.model.User;
 import lombok.AllArgsConstructor;
@@ -9,12 +9,12 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserSignupDTO {
     private String username;
     private String password;
     private String email;
 
-    public UserDto(User user) {
+    public UserSignupDTO(User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.email = user.getEmail();

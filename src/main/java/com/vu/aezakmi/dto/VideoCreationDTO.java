@@ -1,22 +1,18 @@
 package com.vu.aezakmi.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoDto {
-
+public class VideoCreationDTO {
+    private MultipartFile file;
     private Long id;
 
     private String title;
 
     private String description;
 
-    private String videoUrl;
-
     private Long courseId;
 }
-

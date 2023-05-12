@@ -1,6 +1,6 @@
 package com.vu.aezakmi.service;
 
-import com.vu.aezakmi.dto.CourseDto;
+import com.vu.aezakmi.dto.CourseDTO;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +14,15 @@ public class CourseService {
     @Autowired
     CourseRepository courseRepository;
 
-    public void create(Course course) {
-        courseRepository.save(course);
+    public Course create(Course course) {
+        return courseRepository.save(course);
     }
 
-    public List<CourseDto> getAllCourses() {
+    public List<CourseDTO> getAllCourses() {
         return courseRepository.findAllWithCreatorIds();
     }
 
-    public Optional<CourseDto> getCourseByIdWithCreatorId(Long id) {
+    public Optional<CourseDTO> getCourseByIdWithCreatorId(Long id) {
         return courseRepository.findByIdWithCreatorId(id);
     }
 

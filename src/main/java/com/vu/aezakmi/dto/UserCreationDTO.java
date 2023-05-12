@@ -1,15 +1,16 @@
-package com.vu.aezakmi.controller.dto;
+package com.vu.aezakmi.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginDto {
+public class UserCreationDTO {
+    private Long id;
     private String username;
     private String password;
+    private String email;
+    private Long roleId;
 }

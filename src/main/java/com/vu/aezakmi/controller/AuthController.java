@@ -1,7 +1,7 @@
 package com.vu.aezakmi.controller;
 
-import com.vu.aezakmi.controller.dto.LoginDto;
-import com.vu.aezakmi.controller.dto.UserDto;
+import com.vu.aezakmi.dto.UserLoginDTO;
+import com.vu.aezakmi.dto.UserSignupDTO;
 import com.vu.aezakmi.service.AuthService;
 import com.vu.aezakmi.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +29,12 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public void signup(@RequestBody UserDto userDto) {
-        authService.signup(userDto);
+    public void signup(@RequestBody UserSignupDTO userSignupDto) {
+        authService.signup(userSignupDto);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDto userLogin) {
+    public String login(@RequestBody UserLoginDTO userLogin) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(userLogin.getUsername());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, userLogin.getPassword(), userDetails.getAuthorities());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);

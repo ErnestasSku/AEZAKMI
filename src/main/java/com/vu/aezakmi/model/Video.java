@@ -21,10 +21,10 @@ public class Video {
     @Column(nullable = false)
     private String description;
 
+    @Lob
     @Column(nullable = false)
-    private String videoUrl;
+    private byte[] data;
 
-//    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
