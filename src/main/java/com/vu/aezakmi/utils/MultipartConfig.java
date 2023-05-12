@@ -1,4 +1,4 @@
-package com.vu.aezakmi.multipartRequest;
+package com.vu.aezakmi.utils;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

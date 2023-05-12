@@ -1,6 +1,6 @@
 package com.vu.aezakmi.controller;
 
-import com.vu.aezakmi.controller.dto.UserDto;
+import com.vu.aezakmi.dto.UserSignupDTO;
 import com.vu.aezakmi.model.User;
 import com.vu.aezakmi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
-    public List<UserDto> getUsers() {
+    public List<UserSignupDTO> getUsers() {
         return userService.getUsers();
     }
 }

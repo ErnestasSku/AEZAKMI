@@ -1,6 +1,6 @@
 package com.vu.aezakmi.service;
 
-import com.vu.aezakmi.controller.dto.UserDto;
+import com.vu.aezakmi.dto.UserSignupDTO;
 import com.vu.aezakmi.model.Role;
 import com.vu.aezakmi.model.RoleType;
 import com.vu.aezakmi.model.User;
@@ -24,20 +24,20 @@ public class AuthService {
         this.roleRepository = roleRepository;
     }
 
-    public void signup(UserDto userDto) {
+    public void signup(UserSignupDTO userSignupDto) {
         Role userRole = roleRepository.findByType(RoleType.USER)
                 .orElseThrow(() -> new RuntimeException("User role not found"));
 
         User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setEmail(userDto.getEmail());
+        user.setUsername(userSignupDto.getUsername());
+        user.setPassword(passwordEncoder.encode(userSignupDto.getPassword()));
+        user.setEmail(userSignupDto.getEmail());
         user.setRole(userRole);
 
         userRepository.save(user);
     }
 
-    public UserDto login(String username, String password) {
+    public UserSignupDTO login(String username, String password) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -45,7 +45,7 @@ public class AuthService {
             throw new RuntimeException("Invalid password");
         }
 
-        return new UserDto(user);
+        return new UserSignupDTO(user);
     }
 
 
