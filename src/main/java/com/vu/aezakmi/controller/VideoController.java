@@ -1,12 +1,13 @@
 package com.vu.aezakmi.controller;
 
 import com.vu.aezakmi.dto.VideoCreationDTO;
+import com.vu.aezakmi.dto.VideoRetrievalDTO;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.Video;
 import com.vu.aezakmi.service.CourseService;
 import com.vu.aezakmi.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,34 +26,24 @@ public class VideoController {
 
     @PostMapping
     public ResponseEntity<?> uploadVideo(@ModelAttribute VideoCreationDTO videoCreationDTO) throws IOException {
-        Video video = new Video();
-        video.setTitle(videoCreationDTO.getTitle());
-        video.setDescription(videoCreationDTO.getDescription());
-
-        if (videoCreationDTO.getCourseId() != null) {
-            courseService.getCourseById(videoCreationDTO.getCourseId()).ifPresent(video::setCourse);
-        }
-
-        if (videoCreationDTO.getFile() == null) {
-            return new ResponseEntity<>("Video should be uploaded!", HttpStatus.BAD_REQUEST);
-        }
-
-        Video uploadedVideo = videoService.upload(video, videoCreationDTO.getFile());
-        if (uploadedVideo == null) {
-            return new ResponseEntity<>("Video did not create", HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>("Video with ID " + uploadedVideo.getId() + " got created", HttpStatus.CREATED);
+        return videoService.upload(videoCreationDTO);
     }
 
     @GetMapping
-    public List<Video> getAllVideos() {
+    public List<VideoRetrievalDTO> getAllVideos() {
         return videoService.getAllVideos();
     }
 
     @GetMapping("{id}")
-    public Video getVideoById(@PathVariable Long id) {
-        return videoService.getVideoById(id).orElse(null);
+    public VideoRetrievalDTO getVideoById(@PathVariable Long id) {
+        return videoService.getVideoDtoById(id);
+    }
+
+
+    @GetMapping(value = "{id}/data",
+    produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public byte[] getVideoData(@PathVariable Long id) {
+        return videoService.getVideoData(id);
     }
 
     @PatchMapping("{videoId}/course/{courseId}")
