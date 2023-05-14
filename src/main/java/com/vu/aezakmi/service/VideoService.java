@@ -15,9 +15,9 @@ public class VideoService {
     @Autowired
     VideoRepository videoRepository;
 
-    public void upload(Video video, MultipartFile file) throws IOException {
+    public Video upload(Video video, MultipartFile file) throws IOException {
         video.setData(file.getBytes());
-        videoRepository.save(video);
+        return videoRepository.save(video);
     }
 
     public List<Video> getAllVideos() {

@@ -1,11 +1,13 @@
 package com.vu.aezakmi.controller;
 
-import com.vu.aezakmi.multipartRequest.VideoUploadRequest;
+import com.vu.aezakmi.dto.VideoCreationDTO;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.Video;
 import com.vu.aezakmi.service.CourseService;
 import com.vu.aezakmi.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,14 +24,25 @@ public class VideoController {
     private CourseService courseService;
 
     @PostMapping
-    public void uploadVideo(@ModelAttribute VideoUploadRequest videoUploadRequest) throws IOException {
+    public ResponseEntity<?> uploadVideo(@ModelAttribute VideoCreationDTO videoCreationDTO) throws IOException {
         Video video = new Video();
-        video.setTitle(videoUploadRequest.getVideoDto().getTitle());
-        video.setDescription(videoUploadRequest.getVideoDto().getDescription());
+        video.setTitle(videoCreationDTO.getTitle());
+        video.setDescription(videoCreationDTO.getDescription());
 
-        courseService.getCourseById(videoUploadRequest.getVideoDto().getCourseId()).ifPresent(video::setCourse);
+        if (videoCreationDTO.getCourseId() != null) {
+            courseService.getCourseById(videoCreationDTO.getCourseId()).ifPresent(video::setCourse);
+        }
 
-        videoService.upload(video, videoUploadRequest.getFile());
+        if (videoCreationDTO.getFile() == null) {
+            return new ResponseEntity<>("Video should be uploaded!", HttpStatus.BAD_REQUEST);
+        }
+
+        Video uploadedVideo = videoService.upload(video, videoCreationDTO.getFile());
+        if (uploadedVideo == null) {
+            return new ResponseEntity<>("Video did not create", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>("Video with ID " + uploadedVideo.getId() + " got created", HttpStatus.CREATED);
     }
 
     @GetMapping

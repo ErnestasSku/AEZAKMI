@@ -22,9 +22,9 @@ public class Video {
     private String description;
 
     @Lob
+    @Column(nullable = false)
     private byte[] data;
 
-//    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
