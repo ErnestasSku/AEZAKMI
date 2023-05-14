@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/videos")
+@RequestMapping("api/videos")
 public class VideoController {
 
     @Autowired
