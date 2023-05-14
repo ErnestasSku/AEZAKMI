@@ -4,7 +4,6 @@ import com.vu.aezakmi.dto.CourseDTO;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.Video;
 import com.vu.aezakmi.service.CourseService;
-import com.vu.aezakmi.service.UserService;
 import com.vu.aezakmi.service.VideoService;
 import com.vu.aezakmi.utils.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/courses")
+@RequestMapping("api/courses")
 public class CourseController {
 
     @Autowired

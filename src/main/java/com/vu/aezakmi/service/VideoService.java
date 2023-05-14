@@ -81,7 +81,7 @@ public class VideoService {
         videoRetrievalDTO.setDescription(video.getDescription() != null ? video.getDescription() : null);
         videoRetrievalDTO.setCourseId(video.getCourse() != null ? video.getCourse().getId() : null);
         videoRetrievalDTO.setImageUrl(video.getImage() != null ?
-                ("http://localhost:" + serverPortService.getPort() + "/images/" + video.getImage().getId())
+                ("http://localhost:" + serverPortService.getPort() + "/api/images/" + video.getImage().getId())
                 : null);
         return videoRetrievalDTO;
     }
