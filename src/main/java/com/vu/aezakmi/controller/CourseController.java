@@ -2,8 +2,6 @@ package com.vu.aezakmi.controller;
 
 import com.vu.aezakmi.dto.CourseDTO;
 import com.vu.aezakmi.model.Course;
-import com.vu.aezakmi.model.RoleType;
-import com.vu.aezakmi.model.User;
 import com.vu.aezakmi.model.Video;
 import com.vu.aezakmi.service.CourseService;
 import com.vu.aezakmi.service.UserService;
@@ -26,35 +24,9 @@ public class CourseController {
     @Autowired
     private VideoService videoService;
 
-    @Autowired
-    private UserService userService;
-
     @PostMapping
     public ResponseEntity<?> createCourse(@RequestBody CourseDTO courseDto) {
-        Course course = new Course();
-        course.setName(courseDto.getName());
-        course.setDescription(courseDto.getDescription());
-
-        Long creatorId = courseDto.getCreatorId();
-        if (creatorId == null) {
-            return new ResponseEntity<>("creatorID should be set", HttpStatus.BAD_REQUEST);
-        }
-
-        User user = userService.getUserById(creatorId).orElse(null);
-        if (user == null) {
-            return new ResponseEntity<>("No user with exists with provided creatorId", HttpStatus.BAD_REQUEST);
-        } else if (user.getRole().getType() != RoleType.TEACHER) {
-            return new ResponseEntity<>("You do not have access for this action", HttpStatus.FORBIDDEN);
-        } else {
-            course.setCreator(user);
-        }
-
-        Course createdCourse = courseService.create(course);
-        if (createdCourse == null) {
-            return new ResponseEntity<>("Course did not create", HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>("Course with ID " + createdCourse.getId() + " got created", HttpStatus.CREATED);
+        return courseService.create(courseDto);
     }
 
     @GetMapping
