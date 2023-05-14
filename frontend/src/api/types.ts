@@ -12,17 +12,24 @@ export interface RegisterUserRequest {
   password: string;
 }
 
-export interface Video {
+export interface VideoPreview {
   id: string;
   title: string;
   description?: string;
+  imageUrl: string;
+  courseId?: number;
+}
+
+export interface VideoData {
   data: Blob;
 }
 
 export interface UploadVideoRequest {
   title: string;
   description?: string;
-  data: Blob;
+  video: File;
+  image: File;
+  courseId?: number;
 }
 
 export interface LoginRequest {

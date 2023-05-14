@@ -1,6 +1,6 @@
 import { DragDropFiles } from './DragDropFiles';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Stack, TextField } from '@mui/material';
+import { Button, FormHelperText, Stack, TextField } from '@mui/material';
 import { Upload } from '@mui/icons-material';
 import { uploadVideo } from '../../api';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ interface FormData {
   title: string;
   description: string;
   video: File | null;
+  image: File | null;
 }
 
 export const UploadVideoForm = () => {
@@ -17,6 +18,7 @@ export const UploadVideoForm = () => {
       title: '',
       description: '',
       video: null,
+      image: null,
     },
   });
   const navigate = useNavigate();
@@ -25,9 +27,13 @@ export const UploadVideoForm = () => {
     const { status } = await uploadVideo({
       title: data.title,
       description: data.description,
-      data: data.video!,
+      video: data.video!,
+      image: data.image!,
+      // TODO: add courseId here and Course picker in the form
+      // courseId: null,
     });
-    if (status === 200) {
+
+    if (status === 201) {
       alert('Video uploaded successfully!');
       navigate('/videos');
     }
@@ -95,6 +101,37 @@ export const UploadVideoForm = () => {
               helperText={error ? error.message : null}
               minRows={3}
             />
+          )}
+        />
+        <Controller
+          name="image"
+          control={control}
+          rules={{
+            required: 'Image file is required',
+          }}
+          render={({ field: { value, onChange }, fieldState: { error } }) => (
+            <>
+              <Button variant="contained" component="label">
+                Select image
+                <input
+                  accept="image/jpeg, image/png"
+                  type="file"
+                  hidden
+                  onChange={event =>
+                    event.target.files?.length &&
+                    onChange(event.target.files?.[0])
+                  }
+                />
+              </Button>
+              <span style={{ marginTop: 0 }}>
+                {value ? value.name : 'None selected...'}
+              </span>
+              {error && (
+                <FormHelperText style={{ marginTop: 8 }} error>
+                  {error.message}
+                </FormHelperText>
+              )}
+            </>
           )}
         />
         <Button

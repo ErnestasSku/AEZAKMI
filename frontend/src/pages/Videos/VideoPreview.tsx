@@ -1,18 +1,20 @@
 import { Container } from '@mui/material';
-import { Video } from '../../api';
+import { VideoPreview } from '../../api';
 import { Link } from 'react-router-dom';
 
 interface Props {
-  video: Video;
+  video: VideoPreview;
 }
 
-export const VideoPreview = ({ video }: Props) => {
+export const VideoPreviewView = ({ video }: Props) => {
   return (
-    <Link to={`${video.id}`}>
+    <Link to={`${video.id}`} state={{ video }}>
       <Container>
         <img
           width="100%"
-          src="https://static-cse.canva.com/blob/1053959/1600w-wK95f3XNRaM.jpg"
+          height="150px"
+          style={{ objectFit: 'cover' }}
+          src={video.imageUrl}
         />
         <p>{video.title}</p>
       </Container>
