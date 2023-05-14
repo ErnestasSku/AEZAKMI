@@ -18,6 +18,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (token) {
       localStorage.setItem('token', token);
+    } else {
+      localStorage.removeItem('token');
     }
   }, [token]);
 
