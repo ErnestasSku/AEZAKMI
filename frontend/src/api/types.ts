@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 export interface User {
   id: number;
   email: string;
@@ -37,6 +39,15 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse {
-  data: string;
+export interface LoggedInUser {
+  id: number;
+  username: string;
 }
+
+export type LoginResponse = ApiResponse<
+  LoggedInUser & {
+    token: string;
+  }
+>;
+
+export type ApiResponse<T = unknown> = AxiosResponse<T>;

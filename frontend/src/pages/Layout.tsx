@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 const PAGES = ['Home', 'Courses', 'Users', 'Videos'];
 
 const Layout: React.FC = () => {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth();
   const navigate = useNavigate();
 
   const logoutHandler = () => {
@@ -50,8 +50,7 @@ const Layout: React.FC = () => {
             </Button>
           </Link>
           <>
-            {/* TODO: add logged in user's username here */}
-            <span>my_username</span>
+            <span>{user?.username}</span>
             <IconButton style={{ color: 'white' }} onClick={logoutHandler}>
               <Logout>Logout</Logout>
             </IconButton>
