@@ -1,12 +1,15 @@
-import { Person, VideoCameraBack } from '@mui/icons-material';
-import { AppBar, Button, MenuItem, Toolbar } from '@mui/material';
+import { Logout, VideoCameraBack } from '@mui/icons-material';
+import { AppBar, Button, IconButton, MenuItem, Toolbar } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const PAGES = ['Home', 'Courses', 'Users', 'Videos'];
 
 const Layout: React.FC = () => {
-  return (
+  const { isLoggedIn, logout } = useAuth();
+
+  return isLoggedIn ? (
     <AppBar position="static">
       <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex' }}>
@@ -21,7 +24,14 @@ const Layout: React.FC = () => {
             </MenuItem>
           ))}
         </div>
-        <div style={{ display: 'flex', alignContent: 'center', gap: '30px' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignContent: 'center',
+            alignItems: 'center',
+            gap: '30px',
+          }}
+        >
           <Link to={'/videos/upload'}>
             <Button
               style={{ backgroundColor: 'white', color: 'black' }}
@@ -31,15 +41,12 @@ const Layout: React.FC = () => {
               Upload video
             </Button>
           </Link>
-          <Link
-            to={'/login'}
-            style={{ outline: 0, color: 'white', display: 'flex' }}
-          >
-            <Person>Login</Person>
-          </Link>
+          <IconButton style={{ color: 'white' }} onClick={logout}>
+            <Logout>Logout</Logout>
+          </IconButton>
         </div>
       </Toolbar>
     </AppBar>
-  );
+  ) : null;
 };
 export default Layout;

@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 import { VideosList } from './VideosList';
+import { withPrivateRoute } from '../../components/PrivateRoute';
 
 const Videos = () => {
   return (
@@ -12,4 +13,4 @@ const Videos = () => {
   );
 };
 
-export default Videos;
+export default withPrivateRoute(Videos);

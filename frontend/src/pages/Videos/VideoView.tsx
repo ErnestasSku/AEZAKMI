@@ -2,8 +2,9 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { fetchVideo } from '../../api';
 import { useCallback } from 'react';
+import { withPrivateRoute } from '../../components/PrivateRoute';
 
-export const VideoView = () => {
+export const VideoView = withPrivateRoute(() => {
   const { id = '' } = useParams<{ id: string }>();
   const { data, isLoading } = useQuery('video', () => fetchVideo(id));
 
@@ -28,4 +29,4 @@ export const VideoView = () => {
       <p>{data?.data.description}</p>
     </div>
   );
-};
+});
