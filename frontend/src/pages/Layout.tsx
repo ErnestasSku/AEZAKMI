@@ -49,9 +49,13 @@ const Layout: React.FC = () => {
               Upload video
             </Button>
           </Link>
-          <IconButton style={{ color: 'white' }} onClick={logoutHandler}>
-            <Logout>Logout</Logout>
-          </IconButton>
+          <>
+            {/* TODO: add logged in user's username here */}
+            <span>my_username</span>
+            <IconButton style={{ color: 'white' }} onClick={logoutHandler}>
+              <Logout>Logout</Logout>
+            </IconButton>
+          </>
         </div>
       </Toolbar>
     </AppBar>

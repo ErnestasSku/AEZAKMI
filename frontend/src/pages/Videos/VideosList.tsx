@@ -1,5 +1,5 @@
 import { List, ListItem } from '@mui/material';
-import { VideoPreview } from './VideoPreview';
+import { VideoPreviewView } from './VideoPreview';
 import { fetchAllVideoPreviews } from '../../api';
 import { useQuery } from 'react-query';
 import { convertArrayToChunks } from '../../utils/array';
@@ -20,9 +20,9 @@ export const VideosList = ({}) => {
           {chunks.map((chunk, index) => (
             <ListItem key={index}>
               {chunk.map(video => (
-                // Fix small space at the end of the row
-                <div style={{ width: '33%' }}>
-                  <VideoPreview key={video.id} video={video} />
+                // TODO: Fix small space at the end of the row
+                <div key={video.id} style={{ width: '33%' }}>
+                  <VideoPreviewView video={video} />
                 </div>
               ))}
             </ListItem>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UploadVideoRequest, User, Video } from '.';
+import { UploadVideoRequest, User, VideoData, VideoPreview } from '.';
 
 // Create an Axios instance
 const axiosInstance = axios.create();
@@ -18,21 +18,17 @@ export const fetchAllUsers = () =>
   axiosInstance.get<unknown, { data: User[] }>('/api/users');
 
 export const fetchAllVideoPreviews = () =>
-  axiosInstance.get<unknown, { data: Video[] }>('/api/videos');
+  axiosInstance.get<unknown, { data: VideoPreview[] }>('/api/videos');
 
 export const fetchVideo = (id: string) =>
-  axiosInstance.get<unknown, { data: Video }>(`/api/videos/${id}`);
+  axiosInstance.get<unknown, { data: VideoPreview }>(`/api/videos/${id}`);
 
-export const uploadVideo = (request: UploadVideoRequest) => {
-  return axiosInstance.post(
-    `/api/videos`,
-    {
-      file: request.data,
-      'videoDto.title': request.title,
-      'videoDto.description': request.description || '',
-      'videoDto.videoUrl': '',
-      'videoDto.courseId': '1',
-    },
-    { headers: { 'Content-Type': 'multipart/form-data' } }
-  );
-};
+export const fetchVideoBlob = (id: string) =>
+  axiosInstance.get<unknown, VideoData>(`/api/videos/${id}/data`, {
+    responseType: 'blob',
+  });
+
+export const uploadVideo = (request: UploadVideoRequest) =>
+  axiosInstance.post<UploadVideoRequest>(`/api/videos`, request, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
