@@ -1,20 +1,30 @@
 import axios from 'axios';
-import { RegisterUserRequest, UploadVideoRequest, User, Video } from '.';
+import { UploadVideoRequest, User, Video } from '.';
+
+// Create an Axios instance
+const axiosInstance = axios.create();
+
+axiosInstance.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    console.error('No token found for API request');
+  }
+  return config;
+});
 
 export const fetchAllUsers = () =>
-  axios.get<unknown, { data: User[] }>('/api/users');
-
-export const registerUser = (request: RegisterUserRequest) =>
-  axios.post('/api/users', request);
+  axiosInstance.get<unknown, { data: User[] }>('/api/users');
 
 export const fetchAllVideoPreviews = () =>
-  axios.get<unknown, { data: Video[] }>('/api/videos');
+  axiosInstance.get<unknown, { data: Video[] }>('/api/videos');
 
 export const fetchVideo = (id: string) =>
-  axios.get<unknown, { data: Video }>(`/api/videos/${id}`);
+  axiosInstance.get<unknown, { data: Video }>(`/api/videos/${id}`);
 
 export const uploadVideo = (request: UploadVideoRequest) => {
-  return axios.post(
+  return axiosInstance.post(
     `/api/videos`,
     {
       file: request.data,
