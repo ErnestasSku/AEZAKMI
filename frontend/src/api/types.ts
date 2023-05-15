@@ -44,6 +44,13 @@ export interface LoggedInUser {
   username: string;
 }
 
+export interface Course {
+  id: number;
+  name: string;
+  description: string;
+  creatorId: number;
+}
+
 export type LoginResponse = ApiResponse<
   LoggedInUser & {
     token: string;

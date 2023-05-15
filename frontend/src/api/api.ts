@@ -1,5 +1,12 @@
 import axios from 'axios';
-import { UploadVideoRequest, User, VideoData, VideoPreview } from '.';
+import {
+  ApiResponse,
+  Course,
+  UploadVideoRequest,
+  User,
+  VideoData,
+  VideoPreview,
+} from '.';
 
 // Create an Axios instance
 const axiosInstance = axios.create();
@@ -27,6 +34,9 @@ export const fetchVideoBlob = (id: string) =>
   axiosInstance.get<unknown, VideoData>(`/api/videos/${id}/data`, {
     responseType: 'blob',
   });
+
+export const fetchUserCourses = (id: number) =>
+  axiosInstance.get<unknown, ApiResponse<Course[]>>(`/api/users/${id}/courses`);
 
 export const uploadVideo = (request: UploadVideoRequest) =>
   axiosInstance.post<UploadVideoRequest>(`/api/videos`, request, {

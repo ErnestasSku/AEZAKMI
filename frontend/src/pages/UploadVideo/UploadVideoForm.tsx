@@ -1,15 +1,24 @@
 import { DragDropFiles } from './DragDropFiles';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, FormHelperText, Stack, TextField } from '@mui/material';
+import {
+  Button,
+  FormHelperText,
+  MenuItem,
+  Stack,
+  TextField,
+} from '@mui/material';
 import { Upload } from '@mui/icons-material';
-import { uploadVideo } from '../../api';
+import { fetchUserCourses, uploadVideo } from '../../api';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import { useQuery } from 'react-query';
 
 interface FormData {
   title: string;
   description: string;
   video: File | null;
   image: File | null;
+  courseId: number | null;
 }
 
 export const UploadVideoForm = () => {
@@ -19,9 +28,14 @@ export const UploadVideoForm = () => {
       description: '',
       video: null,
       image: null,
+      courseId: null,
     },
   });
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { data: userCourses } = useQuery(`user-courses-${user!.id}`, () =>
+    fetchUserCourses(user!.id)
+  );
 
   const submitForm = async (data: FormData) => {
     const { status } = await uploadVideo({
@@ -29,8 +43,7 @@ export const UploadVideoForm = () => {
       description: data.description,
       video: data.video!,
       image: data.image!,
-      // TODO: add courseId here and Course picker in the form
-      // courseId: null,
+      courseId: data.courseId || undefined,
     });
 
     if (status === 201) {
@@ -131,6 +144,38 @@ export const UploadVideoForm = () => {
                   {error.message}
                 </FormHelperText>
               )}
+            </>
+          )}
+        />
+        <Controller
+          name="courseId"
+          control={control}
+          render={({ field }) => (
+            <>
+              <TextField
+                {...field}
+                fullWidth
+                select
+                value={field.value ?? ''}
+                label="Course"
+                helperText="Optional: you may choose to assign this video to a created course"
+                style={{ textAlign: 'left' }}
+              >
+                {userCourses?.data ? (
+                  [
+                    <MenuItem selected key="none" value="">
+                      None
+                    </MenuItem>,
+                    userCourses.data.map(course => (
+                      <MenuItem key={course.id} value={course.id}>
+                        {course.name}
+                      </MenuItem>
+                    )),
+                  ]
+                ) : (
+                  <MenuItem>Loading...</MenuItem>
+                )}
+              </TextField>
             </>
           )}
         />
