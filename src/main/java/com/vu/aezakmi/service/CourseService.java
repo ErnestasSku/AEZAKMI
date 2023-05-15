@@ -4,8 +4,10 @@ import com.vu.aezakmi.dto.CourseDTO;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.RoleType;
 import com.vu.aezakmi.model.User;
+import com.vu.aezakmi.model.Video;
 import com.vu.aezakmi.repository.CourseRepository;
 import com.vu.aezakmi.repository.UserRepository;
+import com.vu.aezakmi.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,9 @@ public class CourseService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    VideoRepository videoRepository;
 
     public ResponseEntity<?> create(CourseDTO courseDto) {
         // validation
@@ -53,6 +58,26 @@ public class CourseService {
 
     public Optional<CourseDTO> getCourseByIdWithCreatorId(Long id) {
         return courseRepository.findByIdWithCreatorId(id);
+    }
+
+    public ResponseEntity<?> addVideoToCourse(Long courseId, Long videoId) {
+        Course course = courseRepository.findById(courseId).orElse(null);
+        if (course == null) {
+            return new ResponseEntity<>("Course with specified Id does not exist", HttpStatus.BAD_REQUEST);
+        }
+
+        Video video = videoRepository.findById(videoId).orElse(null);
+        if (video == null) {
+            return new ResponseEntity<>("Video with specified Id does not exist", HttpStatus.BAD_REQUEST);
+        }
+
+        video.setCourse(course);
+        videoRepository.save(video);
+
+        return new ResponseEntity<>(
+                "Video (id: " + video.getId() + ") was added to course (id: " + course.getId() + ")",
+                HttpStatus.OK
+        );
     }
 
     public Optional<Course> getCourseById(Long id) {
