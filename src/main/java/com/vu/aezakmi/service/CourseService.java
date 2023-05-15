@@ -51,6 +51,10 @@ public class CourseService {
         return courseRepository.findAllWithCreatorIds();
     }
 
+    public List<CourseDTO> getAllCoursesByCreatorId(Long creatorId) {
+        return courseRepository.findAllByCreatorId(creatorId);
+    }
+
     public Optional<CourseDTO> getCourseByIdWithCreatorId(Long id) {
         return courseRepository.findByIdWithCreatorId(id);
     }

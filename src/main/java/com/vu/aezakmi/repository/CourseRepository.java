@@ -13,6 +13,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT new com.vu.aezakmi.dto.CourseDTO(c.id, c.name, c.description, c.creator.id) FROM Course c")
     List<CourseDTO> findAllWithCreatorIds();
 
+    @Query("SELECT new com.vu.aezakmi.dto.CourseDTO(c.id, c.name, c.description, c.creator.id) FROM Course c WHERE c.creator.id = :creatorId")
+    List<CourseDTO> findAllByCreatorId(@Param("creatorId") Long creatorId);
+
     @Query("SELECT new com.vu.aezakmi.dto.CourseDTO(c.id, c.name, c.description, c.creator.id) FROM Course c WHERE c.id = :courseId")
     Optional<CourseDTO> findByIdWithCreatorId(@Param("courseId") Long courseId);
 }
