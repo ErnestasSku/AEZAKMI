@@ -32,7 +32,7 @@ export const DragDropFiles = ({ file, setFile, error }: Props) => {
             outlineColor: error ? 'red' : 'black',
             padding: '10px',
             width: '100%',
-            height: '60vh',
+            height: '50vh',
             display: 'flex',
             justifyContent: 'center',
           }}
