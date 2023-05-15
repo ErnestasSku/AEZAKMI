@@ -12,7 +12,7 @@ export const VideoPreviewView = ({ video }: Props) => {
       <Container>
         <img
           width="100%"
-          height="150px"
+          height="200vh"
           style={{ objectFit: 'cover' }}
           src={video.imageUrl}
         />
