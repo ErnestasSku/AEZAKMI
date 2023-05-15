@@ -25,6 +25,10 @@ public class Video {
     @Column(nullable = false)
     private byte[] data;
 
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
+
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
