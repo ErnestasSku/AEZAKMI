@@ -7,21 +7,25 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 type FormData = {
-  email: string;
+  username: string;
   password: string;
   rememberMe: boolean;
 };
 
 export const LoginForm = () => {
   const { handleSubmit, control } = useForm<FormData>({
-    defaultValues: { email: '', password: '', rememberMe: false },
+    defaultValues: { username: '', password: '', rememberMe: false },
   });
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const onSubmit = async ({ username, password }: FormData) => {
+    await login(username, password);
+    navigate('/home');
   };
 
   return (
@@ -44,18 +48,18 @@ export const LoginForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           <Controller
-            name="email"
+            name="username"
             control={control}
-            rules={{ required: 'Email is required' }}
+            rules={{ required: 'Username is required' }}
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
                 fullWidth
                 error={!!error}
-                autoComplete="email"
+                autoComplete="username"
                 variant="outlined"
-                label="Email"
-                type="email"
+                label="Username"
+                type="username"
                 autoFocus
                 helperText={error ? error.message : null}
               />
