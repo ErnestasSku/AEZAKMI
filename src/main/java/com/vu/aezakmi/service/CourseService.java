@@ -55,8 +55,8 @@ public class CourseService {
 
     public List<CourseDTO> getAllCourses(String search) {
         List<CourseDTO> courseDTOs = new ArrayList<>();
-        List<Course> courses =
-                search == null ? courseRepository.findAll() : courseRepository.findByNameContainingIgnoreCase(search);
+        List<Course> courses = search == null ? courseRepository.findAll()
+                : courseRepository.findByNameContainingIgnoreCase(search);
         for (Course course : courses) {
             CourseDTO courseDTO = setCourseDTO(course);
             courseDTOs.add(courseDTO);
@@ -100,8 +100,15 @@ public class CourseService {
 
         return new ResponseEntity<>(
                 "Video (id: " + video.getId() + ") was added to course (id: " + course.getId() + ")",
-                HttpStatus.OK
-        );
+                HttpStatus.OK);
+    }
+
+    public List<CourseDTO> getAllCoursesByCreatorId(Long creatorId) {
+        return courseRepository.findAllByCreatorId(creatorId);
+    }
+
+    public Optional<CourseDTO> getCourseByIdWithCreatorId(Long id) {
+        return courseRepository.findByIdWithCreatorId(id);
     }
 
     public Optional<Course> getCourseById(Long id) {
