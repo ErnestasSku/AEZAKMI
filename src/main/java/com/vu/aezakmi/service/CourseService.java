@@ -84,6 +84,25 @@ public class CourseService {
         return courseDTO;
     }
 
+    public CourseDTO getCourseDtoById(Long id) {
+        Course course = courseRepository.findById(id).orElse(null);
+        if (course != null) {
+            return setCourseDTO(course);
+        }
+
+        return null;
+    }
+
+    private CourseDTO setCourseDTO(Course course) {
+        CourseDTO courseDTO = new CourseDTO();
+        courseDTO.setId(course.getId() != null ? course.getId() : null);
+        courseDTO.setName(course.getName() != null ? course.getName() : null);
+        courseDTO.setDescription(course.getDescription() != null ? course.getDescription() : null);
+        courseDTO.setCreatorId(course.getCreator() != null ? course.getCreator().getId() : null);
+
+        return courseDTO;
+    }
+
     public ResponseEntity<?> addVideoToCourse(Long courseId, Long videoId) {
         Course course = courseRepository.findById(courseId).orElse(null);
         if (course == null) {
