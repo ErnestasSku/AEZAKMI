@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,12 +53,35 @@ public class CourseService {
         return new ResponseEntity<>("Course with ID " + createdCourse.getId() + " got created", HttpStatus.CREATED);
     }
 
-    public List<CourseDTO> getAllCourses() {
-        return courseRepository.findAllWithCreatorIds();
+    public List<CourseDTO> getAllCourses(String search) {
+        List<CourseDTO> courseDTOs = new ArrayList<>();
+        List<Course> courses =
+                search == null ? courseRepository.findAll() : courseRepository.findByNameContainingIgnoreCase(search);
+        for (Course course : courses) {
+            CourseDTO courseDTO = setCourseDTO(course);
+            courseDTOs.add(courseDTO);
+        }
+
+        return courseDTOs;
     }
 
-    public Optional<CourseDTO> getCourseByIdWithCreatorId(Long id) {
-        return courseRepository.findByIdWithCreatorId(id);
+    public CourseDTO getCourseDtoById(Long id) {
+        Course course = courseRepository.findById(id).orElse(null);
+        if (course != null) {
+            return setCourseDTO(course);
+        }
+
+        return null;
+    }
+
+    private CourseDTO setCourseDTO(Course course) {
+        CourseDTO courseDTO = new CourseDTO();
+        courseDTO.setId(course.getId() != null ? course.getId() : null);
+        courseDTO.setName(course.getName() != null ? course.getName() : null);
+        courseDTO.setDescription(course.getDescription() != null ? course.getDescription() : null);
+        courseDTO.setCreatorId(course.getCreator() != null ? course.getCreator().getId() : null);
+
+        return courseDTO;
     }
 
     public ResponseEntity<?> addVideoToCourse(Long courseId, Long videoId) {
