@@ -8,14 +8,11 @@ const NoPage = () => {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        height: '100%',
-        minHeight: '50vh',
+        height: '100vh',
       }}
     >
-      <Typography variant="h1" style={{ color: 'white' }}>
-        404
-      </Typography>
-      <Typography variant="h6" style={{ color: 'white' }}>
+      <Typography variant="h1">404</Typography>
+      <Typography variant="h6">
         The page you’re looking for doesn’t exist :(
       </Typography>
     </Box>

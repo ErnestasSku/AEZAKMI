@@ -1,12 +1,23 @@
-import { Person } from '@mui/icons-material';
-import { AppBar, MenuItem, Toolbar } from '@mui/material';
+import { Logout, VideoCameraBack } from '@mui/icons-material';
+import { AppBar, Button, IconButton, MenuItem, Toolbar } from '@mui/material';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
-const PAGES = ['Home', 'Courses', 'Users'];
+const PAGES = ['Home', 'Courses', 'Users', 'Videos'];
 
 const Layout: React.FC = () => {
-  return (
+  const { isLoggedIn, logout, user } = useAuth();
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    if (confirm('Are you sure you want to log out?')) {
+      logout();
+      navigate('/login');
+    }
+  };
+
+  return isLoggedIn ? (
     <AppBar position="static">
       <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex' }}>
@@ -21,14 +32,32 @@ const Layout: React.FC = () => {
             </MenuItem>
           ))}
         </div>
-        <Link
-          to={'/login'}
-          style={{ outline: 0, color: 'white', display: 'flex' }}
+        <div
+          style={{
+            display: 'flex',
+            alignContent: 'center',
+            alignItems: 'center',
+            gap: '30px',
+          }}
         >
-          <Person>Login</Person>
-        </Link>
+          <Link to={'/videos/upload'}>
+            <Button
+              style={{ backgroundColor: 'white', color: 'black' }}
+              variant="contained"
+              startIcon={<VideoCameraBack />}
+            >
+              Upload video
+            </Button>
+          </Link>
+          <>
+            <span>{user?.username}</span>
+            <IconButton style={{ color: 'white' }} onClick={logoutHandler}>
+              <Logout>Logout</Logout>
+            </IconButton>
+          </>
+        </div>
       </Toolbar>
     </AppBar>
-  );
+  ) : null;
 };
 export default Layout;

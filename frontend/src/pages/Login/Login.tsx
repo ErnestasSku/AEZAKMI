@@ -1,5 +1,6 @@
 import { Container, Grid, Stack, Typography } from '@mui/material';
 import { LoginForm } from './LoginForm';
+import { withPublicRoute } from '../../components/PublicRoute';
 
 const Login = () => {
   return (
@@ -48,4 +49,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withPublicRoute(Login);
