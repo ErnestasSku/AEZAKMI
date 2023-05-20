@@ -27,8 +27,8 @@ public class VideoController {
     }
 
     @GetMapping
-    public List<VideoRetrievalDTO> getAllVideos(@RequestParam(required = false) Long courseId, @RequestParam(required = false) String search) {
-        return videoService.getAllVideos(courseId, search);
+    public List<VideoRetrievalDTO> getAllVideos(@RequestParam(required = false) Long courseId, @RequestParam(required = false) Long creatorId, @RequestParam(required = false) String search) {
+        return videoService.getAllVideos(courseId, creatorId, search);
     }
 
     @GetMapping("{id}")

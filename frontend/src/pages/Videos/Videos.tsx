@@ -11,7 +11,11 @@ const Videos = () => {
   return (
     <>
       <Typography sx={{ padding: '20px' }} variant="h4">
-        {courseId ? `All videos in Course ${courseId}` : 'All videos'}
+        {courseId
+          ? `All videos in Course ${courseId}`
+          : creatorId
+          ? `All videos by Creator ${creatorId}`
+          : 'All videos'}
       </Typography>
       <div>
         <VideosList courseId={courseId} creatorId={creatorId} />

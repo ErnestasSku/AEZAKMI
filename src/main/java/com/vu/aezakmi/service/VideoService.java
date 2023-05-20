@@ -71,7 +71,8 @@ public class VideoService {
         // get user
         String token = authorizationHeader.substring("Bearer ".length());
         String username = tokenService.getUsernameFromToken(token);
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not" +
+                " found"));
         video.setUser(user);
 
         // save video
@@ -80,9 +81,10 @@ public class VideoService {
         return new ResponseEntity<>("Video with ID " + uploadedVideo.getId() + " got created", HttpStatus.CREATED);
     }
 
-    public List<VideoRetrievalDTO> getAllVideos(Long courseId, String search) {
+    public List<VideoRetrievalDTO> getAllVideos(Long courseId, Long creatorId, String search) {
         List<VideoRetrievalDTO> videoRetrievalDTOs = new ArrayList<>();
-        List<Video> videos = courseId != null ? videoRepository.findAllByCourseId(courseId) : search != null ?
+        List<Video> videos = courseId != null ? videoRepository.findAllByCourseId(courseId) : creatorId != null ?
+                videoRepository.findAllByCreatorId(creatorId) : search != null ?
                 videoRepository.findByTitleContainingIgnoreCase(search) : videoRepository.findAll();
         for (Video video : videos) {
             VideoRetrievalDTO videoRetrievalDTO = setVideoDTO(video);
@@ -98,7 +100,8 @@ public class VideoService {
         videoRetrievalDTO.setTitle(video.getTitle() != null ? video.getTitle() : null);
         videoRetrievalDTO.setDescription(video.getDescription() != null ? video.getDescription() : null);
         videoRetrievalDTO.setCourseId(video.getCourse() != null ? video.getCourse().getId() : null);
-        videoRetrievalDTO.setImageUrl(video.getImage() != null ? ("http://localhost:" + serverPortService.getPort() + "/api/images/" + video.getImage().getId()) : null);
+        videoRetrievalDTO.setImageUrl(video.getImage() != null ?
+                ("http://localhost:" + serverPortService.getPort() + "/api/images/" + video.getImage().getId()) : null);
 
         if (video.getUser() != null) {
             VideoCreatorDTO videoCreatorDTO = new VideoCreatorDTO();
@@ -134,7 +137,8 @@ public class VideoService {
 
         video.setCourse(course);
         videoRepository.save(video);
-        return new ResponseEntity<>("Video (id: " + video.getId() + ") was added to course (id: " + course.getId() + ")", HttpStatus.OK);
+        return new ResponseEntity<>("Video (id: " + video.getId() + ") was added to course (id: " + course.getId() +
+                ")", HttpStatus.OK);
     }
 
     public byte[] getVideoData(Long id) {
