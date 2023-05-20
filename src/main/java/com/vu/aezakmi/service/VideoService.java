@@ -1,7 +1,7 @@
 package com.vu.aezakmi.service;
 
+import com.vu.aezakmi.dto.CreatorDTO;
 import com.vu.aezakmi.dto.VideoCreationDTO;
-import com.vu.aezakmi.dto.VideoCreatorDTO;
 import com.vu.aezakmi.dto.VideoRetrievalDTO;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.Image;
@@ -104,10 +104,10 @@ public class VideoService {
                 ("http://localhost:" + serverPortService.getPort() + "/api/images/" + video.getImage().getId()) : null);
 
         if (video.getUser() != null) {
-            VideoCreatorDTO videoCreatorDTO = new VideoCreatorDTO();
-            videoCreatorDTO.setId(video.getUser().getId());
-            videoCreatorDTO.setUsername(video.getUser().getUsername());
-            videoRetrievalDTO.setCreator(videoCreatorDTO);
+            CreatorDTO creatorDTO = new CreatorDTO();
+            creatorDTO.setId(video.getUser().getId());
+            creatorDTO.setUsername(video.getUser().getUsername());
+            videoRetrievalDTO.setCreator(creatorDTO);
         }
         return videoRetrievalDTO;
     }

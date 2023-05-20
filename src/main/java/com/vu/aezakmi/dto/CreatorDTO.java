@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoCreatorDTO {
+public class CreatorDTO {
     private Long id;
     private String username;
 }

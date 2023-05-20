@@ -12,6 +12,6 @@ public class VideoRetrievalDTO {
     private String title;
     private String description;
     private Long courseId;
-    private VideoCreatorDTO creator;
+    private CreatorDTO creator;
     private String imageUrl;
 }
