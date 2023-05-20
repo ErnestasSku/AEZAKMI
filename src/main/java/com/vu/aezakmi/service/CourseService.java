@@ -88,10 +88,6 @@ public class CourseService {
         return courseRepository.findAllByCreatorId(creatorId);
     }
 
-    public Optional<CourseDTO> getCourseByIdWithCreatorId(Long id) {
-        return courseRepository.findByIdWithCreatorId(id);
-    }
-
     public ResponseEntity<?> addVideoToCourse(Long courseId, Long videoId) {
         Course course = courseRepository.findById(courseId).orElse(null);
         if (course == null) {
