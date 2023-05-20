@@ -9,7 +9,11 @@ interface Props {
 export const VideoPreviewView = ({ video }: Props) => {
   return (
     <Paper sx={{ padding: '10px', ':hover': { boxShadow: 10 } }} elevation={4}>
-      <Link to={video.id} state={{ video }} style={{ color: 'inherit' }}>
+      <Link
+        to={video.id.toString()}
+        state={{ video }}
+        style={{ color: 'inherit' }}
+      >
         <Container>
           <img
             width="100%"
