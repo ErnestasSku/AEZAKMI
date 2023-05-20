@@ -48,7 +48,13 @@ export interface Course {
   id: number;
   name: string;
   description: string;
-  creatorId: number;
+  creator: Creator;
+  videoCount: number;
+}
+
+export interface Creator {
+  id: number;
+  username: string;
 }
 
 export type LoginResponse = ApiResponse<

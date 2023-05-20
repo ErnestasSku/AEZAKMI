@@ -3,7 +3,7 @@ import { fetchAllCourses } from '../../api';
 import { CoursePreview } from './CoursePreview';
 
 export const CoursesList = () => {
-  const { data, isLoading } = useQuery('courses', () => fetchAllCourses());
+  const { data, isLoading } = useQuery('courses', fetchAllCourses);
 
   return (
     <div>

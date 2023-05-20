@@ -11,7 +11,7 @@ export const CoursePreview = ({ course }: Props) => {
   const navigate = useNavigate();
 
   const onClick = () => {
-    navigate(`/videos?courseId=${course.id}`);
+    navigate(`/videos?courseId=${course.id}`, { state: { course } });
   };
 
   const onClickCreator = (e: MouseEvent) => {
@@ -63,13 +63,14 @@ export const CoursePreview = ({ course }: Props) => {
               height: '100%',
             }}
           >
-            <div>12 videos </div>
+            <div>{course.videoCount} videos</div>
 
             <Stack direction="row" gap={1}>
               by
               <Link
                 onClick={onClickCreator}
-                to={`/videos?creatorId=${course.creatorId}`}
+                to={`/videos?creatorId=${course.creator.id}`}
+                state={{ course }}
               >
                 <Box
                   sx={{
@@ -79,7 +80,7 @@ export const CoursePreview = ({ course }: Props) => {
                     display: 'inline',
                   }}
                 >
-                  Jamal Jones
+                  {course.creator.username}
                 </Box>
               </Link>
             </Stack>
