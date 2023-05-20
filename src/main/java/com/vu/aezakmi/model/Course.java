@@ -23,6 +23,7 @@ public class Course {
     @JoinColumn(name = "user_id")
     private User creator;
 
+//    @JsonBackReference
     @JsonIgnore
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Video> videos;

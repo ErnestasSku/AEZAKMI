@@ -1,6 +1,5 @@
 package com.vu.aezakmi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,10 +31,6 @@ public class User implements UserDetails {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Video> videos;
 
     public User() {
     }

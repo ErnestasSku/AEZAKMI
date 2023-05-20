@@ -2,6 +2,9 @@ package com.vu.aezakmi.controller;
 
 import com.vu.aezakmi.dto.VideoCreationDTO;
 import com.vu.aezakmi.dto.VideoRetrievalDTO;
+import com.vu.aezakmi.model.Course;
+import com.vu.aezakmi.model.Video;
+import com.vu.aezakmi.service.CourseService;
 import com.vu.aezakmi.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,17 +21,17 @@ public class VideoController {
     @Autowired
     private VideoService videoService;
 
+    @Autowired
+    private CourseService courseService;
+
     @PostMapping
-    public ResponseEntity<?> uploadVideo(
-            @ModelAttribute VideoCreationDTO videoCreationDTO,
-            @RequestHeader("Authorization") String authorizationHeader
-    ) throws IOException {
-        return videoService.upload(videoCreationDTO, authorizationHeader);
+    public ResponseEntity<?> uploadVideo(@ModelAttribute VideoCreationDTO videoCreationDTO) throws IOException {
+        return videoService.upload(videoCreationDTO);
     }
 
     @GetMapping
-    public List<VideoRetrievalDTO> getAllVideos(@RequestParam(required = false) String search) {
-        return videoService.getAllVideos(search);
+    public List<VideoRetrievalDTO> getAllVideos() {
+        return videoService.getAllVideos();
     }
 
     @GetMapping("{id}")
@@ -44,7 +47,14 @@ public class VideoController {
     }
 
     @PatchMapping("{videoId}/course/{courseId}")
-    public ResponseEntity<?> addVideoToCourse(@PathVariable Long videoId, @PathVariable Long courseId) {
-        return videoService.addVideoToCourse(videoId, courseId);
+    public void addVideoToCourse(@PathVariable Long videoId, @PathVariable Long courseId) {
+        Video video = videoService.getVideoById(videoId).orElse(null);
+        if (video != null) {
+            Course course = courseService.getCourseById(courseId).orElse(null);
+            if (course != null) {
+                video.setCourse(course);
+                videoService.updateVideo(video);
+            }
+        }
     }
 }
