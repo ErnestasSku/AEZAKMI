@@ -1,15 +1,20 @@
 package com.vu.aezakmi.service;
 
 import com.vu.aezakmi.dto.VideoCreationDTO;
+import com.vu.aezakmi.dto.VideoCreatorDTO;
 import com.vu.aezakmi.dto.VideoRetrievalDTO;
+import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.Image;
+import com.vu.aezakmi.model.User;
 import com.vu.aezakmi.model.Video;
 import com.vu.aezakmi.repository.CourseRepository;
 import com.vu.aezakmi.repository.ImageRepository;
+import com.vu.aezakmi.repository.UserRepository;
 import com.vu.aezakmi.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,10 +35,16 @@ public class VideoService {
     ImageRepository imageRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private ServerPortService serverPortService;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Transactional
-    public ResponseEntity<?> upload(VideoCreationDTO videoCreationDTO) throws IOException {
+    public ResponseEntity<?> upload(VideoCreationDTO videoCreationDTO, String authorizationHeader) throws IOException {
         // validation
         if (videoCreationDTO.getVideo() == null) {
             return new ResponseEntity<>("Video should be uploaded!", HttpStatus.BAD_REQUEST);
@@ -57,15 +68,23 @@ public class VideoService {
             courseRepository.findById(videoCreationDTO.getCourseId()).ifPresent(video::setCourse);
         }
 
+        // get user
+        String token = authorizationHeader.substring("Bearer ".length());
+        String username = tokenService.getUsernameFromToken(token);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        video.setUser(user);
+
         // save video
         Video uploadedVideo = videoRepository.save(video);
 
         return new ResponseEntity<>("Video with ID " + uploadedVideo.getId() + " got created", HttpStatus.CREATED);
     }
 
-    public List<VideoRetrievalDTO> getAllVideos() {
+    public List<VideoRetrievalDTO> getAllVideos(String search) {
         List<VideoRetrievalDTO> videoRetrievalDTOs = new ArrayList<>();
-        List<Video> videos = videoRepository.findAll();
+        List<Video> videos =
+                search == null ? videoRepository.findAll() : videoRepository.findByTitleContainingIgnoreCase(search);
         for (Video video : videos) {
             VideoRetrievalDTO videoRetrievalDTO = setVideoDTO(video);
             videoRetrievalDTOs.add(videoRetrievalDTO);
@@ -83,6 +102,13 @@ public class VideoService {
         videoRetrievalDTO.setImageUrl(video.getImage() != null ?
                 ("http://localhost:" + serverPortService.getPort() + "/api/images/" + video.getImage().getId())
                 : null);
+
+        if (video.getUser() != null) {
+            VideoCreatorDTO videoCreatorDTO = new VideoCreatorDTO();
+            videoCreatorDTO.setId(video.getUser().getId());
+            videoCreatorDTO.setUsername(video.getUser().getUsername());
+            videoRetrievalDTO.setCreator(videoCreatorDTO);
+        }
         return videoRetrievalDTO;
     }
 
@@ -97,6 +123,24 @@ public class VideoService {
         }
 
         return null;
+    }
+
+    public ResponseEntity<?> addVideoToCourse(Long videoId, Long courseId) {
+        Video video = videoRepository.findById(videoId).orElse(null);
+        if (video == null) {
+            return new ResponseEntity<>("Video with specified Id does not exist", HttpStatus.BAD_REQUEST);
+        }
+        Course course = courseRepository.findById(courseId).orElse(null);
+        if (course == null) {
+            return new ResponseEntity<>("Course with specified Id does not exist", HttpStatus.BAD_REQUEST);
+        }
+
+        video.setCourse(course);
+        videoRepository.save(video);
+        return new ResponseEntity<>(
+                "Video (id: " + video.getId() + ") was added to course (id: " + course.getId() + ")",
+                HttpStatus.OK
+        );
     }
 
     public byte[] getVideoData(Long id) {
