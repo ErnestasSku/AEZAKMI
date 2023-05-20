@@ -2,6 +2,7 @@ import { VideoPreviewView } from './VideoPreview';
 import { VideoPreview, fetchAllVideoPreviews } from '../../api';
 import { useQuery } from 'react-query';
 import { convertArrayToChunks } from '../../utils/array';
+import { Grid } from '@mui/material';
 
 interface Props {
   courseId?: string;
@@ -33,24 +34,16 @@ export const VideosList = ({ courseId, creatorId }: Props) => {
         : 'No videos added yet :('}{' '}
     </div>
   ) : (
-    <>
+    <Grid container rowGap={6} padding={'20px 40px'}>
       {chunks.map((chunk, index) => (
-        <div
-          key={index}
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            padding: '20px 40px',
-          }}
-        >
+        <Grid container key={index} wrap="nowrap" spacing={6}>
           {chunk.map(video => (
-            // TODO: Fix small space at the end of the row
-            <div key={video.id} style={{ width: '33%' }}>
+            <Grid key={video.id} item xs={4}>
               <VideoPreviewView video={video} />
-            </div>
+            </Grid>
           ))}
-        </div>
+        </Grid>
       ))}
-    </>
+    </Grid>
   );
 };
