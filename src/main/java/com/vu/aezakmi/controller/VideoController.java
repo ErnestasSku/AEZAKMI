@@ -27,8 +27,8 @@ public class VideoController {
     }
 
     @GetMapping
-    public List<VideoRetrievalDTO> getAllVideos() {
-        return videoService.getAllVideos();
+    public List<VideoRetrievalDTO> getAllVideos(@RequestParam(required = false) String search) {
+        return videoService.getAllVideos(search);
     }
 
     @GetMapping("{id}")

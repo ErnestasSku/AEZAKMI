@@ -81,9 +81,10 @@ public class VideoService {
         return new ResponseEntity<>("Video with ID " + uploadedVideo.getId() + " got created", HttpStatus.CREATED);
     }
 
-    public List<VideoRetrievalDTO> getAllVideos() {
+    public List<VideoRetrievalDTO> getAllVideos(String search) {
         List<VideoRetrievalDTO> videoRetrievalDTOs = new ArrayList<>();
-        List<Video> videos = videoRepository.findAll();
+        List<Video> videos =
+                search == null ? videoRepository.findAll() : videoRepository.findByTitleContainingIgnoreCase(search);
         for (Video video : videos) {
             VideoRetrievalDTO videoRetrievalDTO = setVideoDTO(video);
             videoRetrievalDTOs.add(videoRetrievalDTO);

@@ -21,13 +21,13 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<CourseDTO> getAllCourses() {
-        return courseService.getAllCourses();
+    public List<CourseDTO> getAllCourses(@RequestParam(required = false) String search) {
+        return courseService.getAllCourses(search);
     }
 
     @GetMapping("{id}")
     public CourseDTO getCourseById(@PathVariable Long id) {
-        return courseService.getCourseByIdWithCreatorId(id).orElse(null);
+        return courseService.getCourseDtoById(id);
     }
 
     @PatchMapping("{courseId}/video/{videoId}")
