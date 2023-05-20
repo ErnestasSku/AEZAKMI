@@ -24,8 +24,16 @@ axiosInstance.interceptors.request.use(config => {
 export const fetchAllUsers = () =>
   axiosInstance.get<unknown, { data: User[] }>('/api/users');
 
-export const fetchAllVideoPreviews = () =>
-  axiosInstance.get<unknown, { data: VideoPreview[] }>('/api/videos');
+export const fetchAllVideoPreviews = ({
+  courseId,
+  creatorId,
+}: {
+  courseId?: string;
+  creatorId?: string;
+}) =>
+  axiosInstance.get<unknown, { data: VideoPreview[] }>('/api/videos', {
+    params: { courseId, creatorId },
+  });
 
 export const fetchAllCourses = () =>
   axiosInstance.get<unknown, { data: Course[] }>('/api/courses');

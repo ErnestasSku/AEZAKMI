@@ -1,14 +1,25 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import { Course } from '../../api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { MouseEvent } from 'react';
 
 interface Props {
   course: Course;
 }
 
 export const CoursePreview = ({ course }: Props) => {
+  const navigate = useNavigate();
+
+  const onClick = () => {
+    navigate(`/videos?courseId=${course.id}`);
+  };
+
+  const onClickCreator = (e: MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <Link to={`/videos?courseId=${course.id}`}>
+    <div onClick={onClick}>
       <Paper
         elevation={3}
         style={{
@@ -16,6 +27,7 @@ export const CoursePreview = ({ course }: Props) => {
           flexDirection: 'row',
           margin: '30px 40px',
           border: '1px solid black',
+          height: '150px',
         }}
         sx={{
           ':hover': {
@@ -46,14 +58,19 @@ export const CoursePreview = ({ course }: Props) => {
               display: 'flex',
               padding: '16px',
               justifyContent: 'space-around',
+              alignItems: 'center',
               fontSize: '1.2rem',
+              height: '100%',
             }}
           >
             <div>12 videos </div>
 
             <Stack direction="row" gap={1}>
               by
-              <Link to={`/videos?creatorId=${course.creatorId}`}>
+              <Link
+                onClick={onClickCreator}
+                to={`/videos?creatorId=${course.creatorId}`}
+              >
                 <Box
                   sx={{
                     ':hover': {
@@ -77,6 +94,6 @@ export const CoursePreview = ({ course }: Props) => {
           <p style={{ padding: '20px', margin: 0 }}>{course.description}</p>
         </div>
       </Paper>
-    </Link>
+    </div>
   );
 };

@@ -1,21 +1,42 @@
 import { VideoPreviewView } from './VideoPreview';
-import { fetchAllVideoPreviews } from '../../api';
+import { VideoPreview, fetchAllVideoPreviews } from '../../api';
 import { useQuery } from 'react-query';
 import { convertArrayToChunks } from '../../utils/array';
 
-export const VideosList = ({}) => {
-  const { data, isLoading } = useQuery('videos', fetchAllVideoPreviews);
+interface Props {
+  courseId?: string;
+  creatorId?: string;
+}
 
-  const chunks = convertArrayToChunks(data?.data, 3);
+export const VideosList = ({ courseId, creatorId }: Props) => {
+  const { data, isLoading } = useQuery(
+    `videos-${JSON.stringify({ courseId, creatorId })}`,
+    () =>
+      fetchAllVideoPreviews({
+        courseId,
+        creatorId,
+      })
+  );
+
+  const chunks: VideoPreview[][] = convertArrayToChunks(data?.data, 3);
 
   return isLoading ? (
     <>
       <div>Loading...</div>
     </>
+  ) : !chunks[0]?.length ? (
+    <div>
+      {courseId
+        ? 'No videos added to course yet :('
+        : creatorId
+        ? 'No videos added by creator yet :('
+        : 'No videos added yet :('}{' '}
+    </div>
   ) : (
     <>
-      {chunks.map(chunk => (
+      {chunks.map((chunk, index) => (
         <div
+          key={index}
           style={{
             display: 'flex',
             justifyContent: 'space-between',

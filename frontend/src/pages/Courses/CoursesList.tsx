@@ -10,7 +10,9 @@ export const CoursesList = () => {
       {isLoading ? (
         <div>Loading...</div>
       ) : data?.data.length ? (
-        data.data.map(course => <CoursePreview course={course} />)
+        data.data.map(course => (
+          <CoursePreview key={course.id} course={course} />
+        ))
       ) : (
         <div>No courses</div>
       )}
