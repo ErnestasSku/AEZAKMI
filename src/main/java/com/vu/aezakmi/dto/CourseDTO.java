@@ -11,5 +11,6 @@ public class CourseDTO {
     private Long id;
     private String name;
     private String description;
-    private Long creatorId;
+    private CreatorDTO creator;
+    private int videoCount;
 }

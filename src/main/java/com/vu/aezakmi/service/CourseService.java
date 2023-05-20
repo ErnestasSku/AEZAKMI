@@ -1,6 +1,7 @@
 package com.vu.aezakmi.service;
 
 import com.vu.aezakmi.dto.CourseDTO;
+import com.vu.aezakmi.dto.CreatorDTO;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.RoleType;
 import com.vu.aezakmi.model.User;
@@ -30,7 +31,7 @@ public class CourseService {
 
     public ResponseEntity<?> create(CourseDTO courseDto) {
         // validation
-        Long creatorId = courseDto.getCreatorId();
+        Long creatorId = courseDto.getCreator().getId();
         if (creatorId == null) {
             return new ResponseEntity<>("creatorID should be set", HttpStatus.BAD_REQUEST);
         }
@@ -79,7 +80,13 @@ public class CourseService {
         courseDTO.setId(course.getId() != null ? course.getId() : null);
         courseDTO.setName(course.getName() != null ? course.getName() : null);
         courseDTO.setDescription(course.getDescription() != null ? course.getDescription() : null);
-        courseDTO.setCreatorId(course.getCreator() != null ? course.getCreator().getId() : null);
+        courseDTO.setVideoCount(course.getVideos().size());
+        if (course.getCreator() != null) {
+            CreatorDTO creatorDTO = new CreatorDTO();
+            creatorDTO.setId(course.getCreator().getId());
+            creatorDTO.setUsername(course.getCreator().getUsername());
+            courseDTO.setCreator(creatorDTO);
+        }
 
         return courseDTO;
     }
