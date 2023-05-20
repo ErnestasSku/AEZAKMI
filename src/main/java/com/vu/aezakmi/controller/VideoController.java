@@ -30,8 +30,8 @@ public class VideoController {
     }
 
     @GetMapping
-    public List<VideoRetrievalDTO> getAllVideos() {
-        return videoService.getAllVideos();
+    public List<VideoRetrievalDTO> getAllVideos(@RequestParam(required = false) Long courseId) {
+        return videoService.getAllVideos(courseId);
     }
 
     @GetMapping("{id}")
@@ -39,9 +39,7 @@ public class VideoController {
         return videoService.getVideoDtoById(id);
     }
 
-
-    @GetMapping(value = "{id}/data",
-    produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "{id}/data", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public byte[] getVideoData(@PathVariable Long id) {
         return videoService.getVideoData(id);
     }

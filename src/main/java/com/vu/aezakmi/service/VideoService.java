@@ -10,6 +10,7 @@ import com.vu.aezakmi.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,9 +64,9 @@ public class VideoService {
         return new ResponseEntity<>("Video with ID " + uploadedVideo.getId() + " got created", HttpStatus.CREATED);
     }
 
-    public List<VideoRetrievalDTO> getAllVideos() {
+    public List<VideoRetrievalDTO> getAllVideos(Long courseId) {
         List<VideoRetrievalDTO> videoRetrievalDTOs = new ArrayList<>();
-        List<Video> videos = videoRepository.findAll();
+        List<Video> videos = courseId != null ? videoRepository.findAllByCourseId(courseId) : videoRepository.findAll();
         for (Video video : videos) {
             VideoRetrievalDTO videoRetrievalDTO = setVideoDTO(video);
             videoRetrievalDTOs.add(videoRetrievalDTO);
