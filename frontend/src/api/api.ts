@@ -27,6 +27,9 @@ export const fetchAllUsers = () =>
 export const fetchAllVideoPreviews = () =>
   axiosInstance.get<unknown, { data: VideoPreview[] }>('/api/videos');
 
+export const fetchAllCourses = () =>
+  axiosInstance.get<unknown, { data: Course[] }>('/api/courses');
+
 export const fetchVideo = (id: string) =>
   axiosInstance.get<unknown, { data: VideoPreview }>(`/api/videos/${id}`);
 
