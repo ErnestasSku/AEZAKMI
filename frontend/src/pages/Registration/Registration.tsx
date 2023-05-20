@@ -1,6 +1,5 @@
 import { Container, Stack, Typography } from '@mui/material';
 import { RegistrationForm } from './RegistrationForm';
-import { withPublicRoute } from '../../components/PublicRoute';
 
 const Registration = () => {
   return (
@@ -42,4 +41,4 @@ const Registration = () => {
   );
 };
 
-export default withPublicRoute(Registration);
+export default Registration;

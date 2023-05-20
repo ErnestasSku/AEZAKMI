@@ -3,7 +3,6 @@ import { List, ListItem, ListItemIcon, Typography } from '@mui/material';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { User, fetchAllUsers } from '../api';
-import { withPrivateRoute } from '../components/PrivateRoute';
 
 const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -36,4 +35,4 @@ const Users: React.FC = () => {
     </>
   );
 };
-export default withPrivateRoute(Users);
+export default Users;

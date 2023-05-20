@@ -1,7 +1,6 @@
 import { CircularProgress, List, ListItem, Typography } from '@mui/material';
 import { useQuery } from 'react-query';
 import { fetchAllUsers } from '../api';
-import { withPrivateRoute } from '../components/PrivateRoute';
 
 const Courses: React.FC = () => {
   const { data, isLoading } = useQuery('users', fetchAllUsers);
@@ -22,4 +21,4 @@ const Courses: React.FC = () => {
   );
 };
 
-export default withPrivateRoute(Courses);
+export default Courses;
