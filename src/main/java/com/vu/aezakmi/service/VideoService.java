@@ -100,7 +100,7 @@ public class VideoService {
         videoRetrievalDTO.setId(video.getId() != null ? video.getId() : null);
         videoRetrievalDTO.setTitle(video.getTitle() != null ? video.getTitle() : null);
         videoRetrievalDTO.setDescription(video.getDescription() != null ? video.getDescription() : null);
-        videoRetrievalDTO.setCourseDto(video.getCourse() != null ? new CourseDTO(video.getCourse()) : null);
+        videoRetrievalDTO.setCourse(video.getCourse() != null ? new CourseDTO(video.getCourse()) : null);
         videoRetrievalDTO.setImageUrl(video.getImage() != null ?
                 ("http://localhost:" + serverPortService.getPort() + "/api/images/" + video.getImage().getId()) : null);
 
