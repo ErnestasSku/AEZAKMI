@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -101,7 +102,8 @@ public class CourseService {
     }
 
     public List<CourseDTO> getAllCoursesByCreatorId(Long creatorId) {
-        return courseRepository.findAllByCreatorId(creatorId);
+        List<Course> courses = courseRepository.findAllByCreatorId(creatorId);
+        return courses.stream().map(course -> new CourseDTO(course)).collect(Collectors.toList());
     }
 
     public ResponseEntity<?> addVideoToCourse(Long courseId, Long videoId) {
