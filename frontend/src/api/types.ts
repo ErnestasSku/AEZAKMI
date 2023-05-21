@@ -19,7 +19,8 @@ export interface VideoPreview {
   title: string;
   description?: string;
   imageUrl: string;
-  courseId?: number;
+  course?: Course;
+  creator: Creator;
 }
 
 export interface VideoData {
