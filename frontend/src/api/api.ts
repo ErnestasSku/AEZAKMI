@@ -57,3 +57,10 @@ export const uploadVideo = (request: UploadVideoRequest) =>
 
 export const createCourse = (request: CreateCourseRequest) =>
   axiosInstance.post<CreateCourseRequest>('/api/courses', request);
+
+export const updateVideoCourse = (videoId: string, courseId?: string) => {
+  if (courseId) {
+    return axiosInstance.patch(`/api/videos/${videoId}/course/${courseId}`);
+  }
+  return axiosInstance.patch(`/api/videos/${videoId}/course`);
+};

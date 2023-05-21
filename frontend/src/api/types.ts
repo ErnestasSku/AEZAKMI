@@ -19,7 +19,7 @@ export interface VideoPreview {
   title: string;
   description?: string;
   imageUrl: string;
-  course?: Course;
+  course?: Course | null;
   creator: Creator;
 }
 
