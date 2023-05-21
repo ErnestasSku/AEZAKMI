@@ -39,9 +39,12 @@ export interface LoginRequest {
   password: string;
 }
 
+export type Role = 'ADMIN' | 'TEACHER' | 'USER';
+
 export interface LoggedInUser {
   id: number;
   username: string;
+  role: Role;
 }
 
 export interface Course {

@@ -1,8 +1,16 @@
 import { Logout, VideoCameraBack } from '@mui/icons-material';
-import { AppBar, Button, IconButton, MenuItem, Toolbar } from '@mui/material';
+import {
+  AppBar,
+  Button,
+  IconButton,
+  MenuItem,
+  Stack,
+  Toolbar,
+} from '@mui/material';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { roleToString } from '../utils/role';
 
 const PAGES = ['Home', 'Courses', 'Users', 'Videos'];
 
@@ -24,7 +32,11 @@ const Layout: React.FC = () => {
           {PAGES.map(page => (
             <MenuItem key={page}>
               <Link
-                style={{ textDecoration: 'none', color: 'white' }}
+                style={{
+                  textDecoration: 'none',
+                  color: 'white',
+                  fontSize: '1.1rem',
+                }}
                 to={page.toLowerCase()}
               >
                 {page}
@@ -50,7 +62,14 @@ const Layout: React.FC = () => {
             </Button>
           </Link>
           <>
-            <span>{user?.username}</span>
+            <Stack>
+              <div style={{ fontSize: '1.3rem', fontWeight: 'bolder' }}>
+                {user?.username}
+              </div>
+              <div style={{ fontSize: '0.9rem' }}>
+                {roleToString(user?.role)}
+              </div>
+            </Stack>
             <IconButton style={{ color: 'white' }} onClick={logoutHandler}>
               <Logout>Logout</Logout>
             </IconButton>
