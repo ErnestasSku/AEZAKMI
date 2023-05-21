@@ -34,6 +34,12 @@ export interface UploadVideoRequest {
   courseId?: number;
 }
 
+export interface CreateCourseRequest {
+  name: string;
+  description: string;
+  videoIds?: string[];
+}
+
 export interface LoginRequest {
   username: string;
   password: string;

@@ -92,7 +92,9 @@ export const CoursePreview = ({ course }: Props) => {
             display: 'flex',
           }}
         >
-          <p style={{ padding: '20px', margin: 0 }}>{course.description}</p>
+          <p style={{ padding: '20px', margin: 0, textAlign: 'left' }}>
+            {course.description}
+          </p>
         </div>
       </Paper>
     </div>

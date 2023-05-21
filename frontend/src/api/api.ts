@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   ApiResponse,
   Course,
+  CreateCourseRequest,
   UploadVideoRequest,
   User,
   VideoData,
@@ -53,3 +54,6 @@ export const uploadVideo = (request: UploadVideoRequest) =>
   axiosInstance.post<UploadVideoRequest>(`/api/videos`, request, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
+
+export const createCourse = (request: CreateCourseRequest) =>
+  axiosInstance.post<CreateCourseRequest>('/api/courses', request);

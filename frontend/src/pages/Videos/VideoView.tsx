@@ -8,9 +8,9 @@ export const VideoView = withPrivateRoute(() => {
   const { id = '' } = useParams<{ id: string }>();
   const { data: blob } = useQuery(`video-blob-${id}`, () => fetchVideoBlob(id));
   const [videoUrl, setVideoUrl] = useState('');
-  const {
-    state: { video },
-  }: { state: { video: VideoPreview } } = useLocation();
+  const { state }: { state?: { video: VideoPreview } } = useLocation();
+  const video = state?.video || JSON.parse(localStorage.getItem('video') || '');
+
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
