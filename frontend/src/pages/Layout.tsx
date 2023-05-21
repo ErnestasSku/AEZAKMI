@@ -12,7 +12,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { roleToString } from '../utils/role';
 
-const PAGES = ['Home', 'Courses', 'Users', 'Videos'];
+const PAGES = ['Courses', 'Videos'];
 
 const Layout: React.FC = () => {
   const { isLoggedIn, logout, user } = useAuth();

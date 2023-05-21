@@ -30,7 +30,7 @@ export const LoginForm = () => {
       alert('Wrong username or password');
       return;
     }
-    navigate('/home');
+    navigate('/');
   };
 
   return (
