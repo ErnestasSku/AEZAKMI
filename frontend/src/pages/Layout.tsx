@@ -1,4 +1,4 @@
-import { Logout, VideoCameraBack } from '@mui/icons-material';
+import { Add, Logout, VideoCameraBack } from '@mui/icons-material';
 import {
   AppBar,
   Button,
@@ -52,15 +52,29 @@ const Layout: React.FC = () => {
             gap: '30px',
           }}
         >
-          <Link to={'/videos/upload'}>
-            <Button
-              style={{ backgroundColor: 'white', color: 'black' }}
-              variant="contained"
-              startIcon={<VideoCameraBack />}
-            >
-              Upload video
-            </Button>
-          </Link>
+          {user?.role != 'USER' && (
+            <>
+              <Link to={'/courses/create'}>
+                <Button
+                  style={{ backgroundColor: 'white', color: 'black' }}
+                  variant="contained"
+                  startIcon={<Add />}
+                >
+                  Create course
+                </Button>
+              </Link>
+              <Link to={'/videos/upload'}>
+                <Button
+                  style={{ backgroundColor: 'white', color: 'black' }}
+                  variant="contained"
+                  startIcon={<VideoCameraBack />}
+                >
+                  Upload video
+                </Button>
+              </Link>
+            </>
+          )}
+
           <>
             <Stack>
               <div style={{ fontSize: '1.3rem', fontWeight: 'bolder' }}>

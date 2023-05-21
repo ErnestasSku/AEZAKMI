@@ -27,7 +27,7 @@ export const CoursePreview = ({ course }: Props) => {
           flexDirection: 'row',
           margin: '30px 40px',
           border: '1px solid black',
-          height: '150px',
+          minHeight: '150px',
         }}
         sx={{
           ':hover': {
