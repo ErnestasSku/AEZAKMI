@@ -142,6 +142,16 @@ public class VideoService {
                 ")", HttpStatus.OK);
     }
 
+    public ResponseEntity<?> removeCourseFromVideo(Long videoId) {
+        Video video = videoRepository.findById(videoId).orElse(null);
+        if (video == null) {
+            return new ResponseEntity<>("Video with specified Id does not exist", HttpStatus.BAD_REQUEST);
+        }
+        video.setCourse(null);
+        videoRepository.save(video);
+        return new ResponseEntity<>("Course was removed from Video (id: " + video.getId() + ")", HttpStatus.OK);
+    }
+
     public byte[] getVideoData(Long id) {
         Video video = videoRepository.findById(id).orElse(null);
         if (video != null) {

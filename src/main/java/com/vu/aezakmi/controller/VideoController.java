@@ -27,7 +27,9 @@ public class VideoController {
     }
 
     @GetMapping
-    public List<VideoRetrievalDTO> getAllVideos(@RequestParam(required = false) Long courseId, @RequestParam(required = false) Long creatorId, @RequestParam(required = false) String search) {
+    public List<VideoRetrievalDTO> getAllVideos(@RequestParam(required = false) Long courseId,
+                                                @RequestParam(required = false) Long creatorId,
+                                                @RequestParam(required = false) String search) {
         return videoService.getAllVideos(courseId, creatorId, search);
     }
 
@@ -44,5 +46,10 @@ public class VideoController {
     @PatchMapping("{videoId}/course/{courseId}")
     public ResponseEntity<?> addVideoToCourse(@PathVariable Long videoId, @PathVariable Long courseId) {
         return videoService.addVideoToCourse(videoId, courseId);
+    }
+
+    @PatchMapping("{videoId}/course")
+    public ResponseEntity<?> removeCourseFromVideo(@PathVariable Long videoId) {
+        return videoService.removeCourseFromVideo(videoId);
     }
 }
