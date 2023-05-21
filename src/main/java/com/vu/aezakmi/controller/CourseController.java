@@ -1,5 +1,6 @@
 package com.vu.aezakmi.controller;
 
+import com.vu.aezakmi.dto.CourseCreationDTO;
 import com.vu.aezakmi.dto.CourseDTO;
 import com.vu.aezakmi.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,9 @@ public class CourseController {
     private CourseService courseService;
 
     @PostMapping
-    public ResponseEntity<?> createCourse(@RequestBody CourseDTO courseDto) {
-        return courseService.create(courseDto);
+    public ResponseEntity<?> createCourse(@RequestBody CourseCreationDTO courseDto,
+                                          @RequestHeader("Authorization") String authorizationHeader) {
+        return courseService.create(courseDto, authorizationHeader);
     }
 
     @GetMapping

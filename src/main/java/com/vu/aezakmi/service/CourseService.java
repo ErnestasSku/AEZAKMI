@@ -1,5 +1,6 @@
 package com.vu.aezakmi.service;
 
+import com.vu.aezakmi.dto.CourseCreationDTO;
 import com.vu.aezakmi.dto.CourseDTO;
 import com.vu.aezakmi.dto.CreatorDTO;
 import com.vu.aezakmi.model.Course;
@@ -12,6 +13,7 @@ import com.vu.aezakmi.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,27 +31,34 @@ public class CourseService {
     @Autowired
     VideoRepository videoRepository;
 
-    public ResponseEntity<?> create(CourseDTO courseDto) {
-        // validation
-        Long creatorId = courseDto.getCreator().getId();
-        if (creatorId == null) {
-            return new ResponseEntity<>("creatorID should be set", HttpStatus.BAD_REQUEST);
-        }
-        User user = userRepository.findById(creatorId).orElse(null);
-        if (user == null) {
-            return new ResponseEntity<>("No user with exists with provided creatorId", HttpStatus.BAD_REQUEST);
-        } else if (user.getRole().getType() != RoleType.TEACHER) {
+    @Autowired
+    TokenService tokenService;
+
+    public ResponseEntity<?> create(CourseCreationDTO courseDto, String authorizationHeader) {
+        // get user
+        String token = authorizationHeader.substring("Bearer ".length());
+        String username = tokenService.getUsernameFromToken(token);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not" +
+                " found"));
+
+        if (user.getRole().getType() != RoleType.TEACHER) {
             return new ResponseEntity<>("You do not have access for this action", HttpStatus.FORBIDDEN);
         }
 
         // create course
         Course course = new Course();
+        course.setCreator(user);
         course.setName(courseDto.getName());
         course.setDescription(courseDto.getDescription());
-        course.setCreator(user);
-
         // save course
         Course createdCourse = courseRepository.save(course);
+
+        List<Long> videoIds = courseDto.getVideoIds();
+        if (videoIds != null) {
+            List<Video> videos = videoRepository.findByIdIn(videoIds);
+            videos.forEach(video -> video.setCourse(createdCourse));
+            videoRepository.saveAll(videos);
+        }
 
         return new ResponseEntity<>("Course with ID " + createdCourse.getId() + " got created", HttpStatus.CREATED);
     }
