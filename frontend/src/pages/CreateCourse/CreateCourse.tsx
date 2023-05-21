@@ -94,7 +94,7 @@ const CreateCourse = withPrivateRoute(() => {
                 multiline
                 autoComplete="description"
                 variant="outlined"
-                label="Course desription"
+                label="Course description"
                 placeholder='e.g. "This course is about programming in Java basics. Here you will learn everything you need to code your first calculator!"'
                 type="text"
                 rows={3}

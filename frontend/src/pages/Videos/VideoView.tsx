@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { Creator, VideoPreview, fetchVideoBlob } from '../../api';
+import { Course, Creator, VideoPreview, fetchVideoBlob } from '../../api';
 import { useEffect, useRef, useState } from 'react';
 import { withPrivateRoute } from '../../components/PrivateRoute';
-import { Avatar, Card, Stack, Typography } from '@mui/material';
+import { Avatar, Card, Paper, Stack, Typography } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
 
 export const VideoView = withPrivateRoute(() => {
@@ -24,7 +24,7 @@ export const VideoView = withPrivateRoute(() => {
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.play();
+      // ref.current.play();
     }
   }, [videoUrl]);
 
@@ -40,9 +40,9 @@ export const VideoView = withPrivateRoute(() => {
       />
       <Stack
         alignItems={'start'}
-        // alignSelf={'start'}
         marginTop={'10px'}
         width={'100%'}
+        gap={3}
         maxWidth={'1300px'}
       >
         <Stack
@@ -54,16 +54,21 @@ export const VideoView = withPrivateRoute(() => {
           <Typography variant="h4">{video.title}</Typography>
           <MadeBy creator={video.creator} />
         </Stack>
-        <Typography variant="subtitle1">{video.description}</Typography>
+        <Typography variant="subtitle1" textAlign={'left'}>
+          {video.description}
+        </Typography>
       </Stack>
+      {video.course && <CourseInfo course={video.course} />}
     </Stack>
   );
 });
 
-export const MadeBy = ({ creator }: { creator: Creator }) => {
+const MadeBy = ({ creator }: { creator: Creator }) => {
   return (
     <Stack direction={'row'} alignItems={'center'} gap={2}>
-      <Typography variant="h6">Made by</Typography>
+      <Typography variant="h6" fontWeight={'normal'}>
+        Made by
+      </Typography>
       <Link to={`/courses?creatorId=${creator.id}`}>
         <Card
           sx={{
@@ -88,5 +93,44 @@ export const MadeBy = ({ creator }: { creator: Creator }) => {
         </Card>
       </Link>
     </Stack>
+  );
+};
+
+const CourseInfo = ({ course }: { course: Course }) => {
+  return (
+    <div
+      style={{
+        marginTop: '30px',
+        width: '50%',
+        textAlign: 'left',
+        alignSelf: 'start',
+      }}
+    >
+      <Typography variant="h6" fontWeight={'normal'}>
+        This video is part of a course:
+      </Typography>
+      <Paper elevation={3} sx={{ marginTop: '10px', padding: '20px' }}>
+        <Stack>
+          <Stack
+            direction={'row'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+          >
+            <Typography variant="h6">{course.name}</Typography>
+            <Typography variant="body1">Videos: {course.videoCount}</Typography>
+          </Stack>
+          <Typography color={grey[600]} variant="body1">
+            {course.description}
+          </Typography>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            {/* <IconButton> */}
+            <Link to={`/videos?courseId=${course.id}`} state={{ course }}>
+              Show all videos
+            </Link>
+            {/* </IconButton> */}
+          </div>
+        </Stack>
+      </Paper>
+    </div>
   );
 };
