@@ -2,12 +2,14 @@ import { Box, Paper, Stack, Typography } from '@mui/material';
 import { Course } from '../../api';
 import { Link, useNavigate } from 'react-router-dom';
 import { MouseEvent } from 'react';
+import { useQueryClient } from 'react-query';
 
 interface Props {
   course: Course;
 }
 
 export const CoursePreview = ({ course }: Props) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const onClick = () => {
@@ -15,6 +17,10 @@ export const CoursePreview = ({ course }: Props) => {
   };
 
   const onClickCreator = (e: MouseEvent) => {
+    queryClient.setQueryData(
+      ['creators', course.creator.id.toString()],
+      course.creator
+    );
     e.stopPropagation();
   };
 

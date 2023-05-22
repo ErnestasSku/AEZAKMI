@@ -1,17 +1,25 @@
-import { Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 import { withPrivateRoute } from '../../components/PrivateRoute';
 import { CoursesList } from './CoursesList';
+import { PageHeader } from '../../components/PageHeader';
+import { useSearchParams } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
+import { Creator } from '../../api';
 
 const Courses: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const client = useQueryClient();
+  const creatorId = searchParams.get('creatorId') ?? undefined;
+  const creator = client.getQueryData<Creator>(['creators', creatorId]);
+
   return (
-    <>
-      <Typography sx={{ padding: '20px' }} variant="h4">
-        Courses
-      </Typography>
-      <div>
-        <CoursesList />
-      </div>
-    </>
+    <Stack>
+      <PageHeader
+        showHeader={false}
+        title={`Courses${creator ? ` by user "${creator.username}"` : ''}`}
+      />
+      <CoursesList creatorId={creatorId} />
+    </Stack>
   );
 };
 

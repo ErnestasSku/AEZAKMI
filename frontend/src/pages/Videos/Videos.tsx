@@ -1,9 +1,9 @@
-import { Paper, Stack, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 import { VideosList } from './VideosList';
 import { withPrivateRoute } from '../../components/PrivateRoute';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { Course } from '../../api';
-import { blueGrey } from '@mui/material/colors';
+import { PageHeader } from '../../components/PageHeader';
 
 const Videos = () => {
   const [searchParams] = useSearchParams();
@@ -13,24 +13,15 @@ const Videos = () => {
   const course = state?.course;
 
   return (
-    <Stack sx={{}}>
-      {courseId ? (
-        <Paper
-          elevation={3}
-          sx={{ textAlign: 'left', margin: '30px', bgcolor: blueGrey[100] }}
-        >
-          <Typography sx={{ padding: '20px' }} variant="h4">
-            {course?.name}
-          </Typography>
-          <Typography sx={{ padding: '20px' }} variant="body1">
-            {course?.description}
-          </Typography>
-        </Paper>
-      ) : (
-        <Typography sx={{ padding: '20px' }} variant="h4">
-          Videos{creatorId && ` by user "${course?.creator.username}"`}
-        </Typography>
-      )}
+    <Stack>
+      <PageHeader
+        showHeader={!!courseId}
+        headerTitle={course?.name}
+        headerSubtitle={course?.description}
+        title={`Videos${
+          creatorId ? ` by user "${course?.creator.username}"` : ''
+        }`}
+      />
       <VideosList courseId={courseId} creatorId={creatorId} />
     </Stack>
   );

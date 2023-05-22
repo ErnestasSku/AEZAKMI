@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   Course,
@@ -41,7 +41,6 @@ export const VideoView = withPrivateRoute(() => {
     updateVideoCourse(video.id, courseId)
   );
   const ref = useRef<HTMLVideoElement>(null);
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   const updateCourse = (course: Course | null) => {
@@ -102,12 +101,18 @@ export const VideoView = withPrivateRoute(() => {
 });
 
 const MadeBy = ({ creator }: { creator: Creator }) => {
+  const client = useQueryClient();
+
+  const onClickCreator = () => {
+    client.setQueryData(['creators', creator.id.toString()], creator);
+  };
+
   return (
     <Stack direction={'row'} alignItems={'center'} gap={2}>
       <Typography variant="h6" fontWeight={'normal'}>
         Made by
       </Typography>
-      <Link to={`/courses?creatorId=${creator.id}`}>
+      <Link onClick={onClickCreator} to={`/courses?creatorId=${creator.id}`}>
         <Card
           sx={{
             padding: '8px 12px',

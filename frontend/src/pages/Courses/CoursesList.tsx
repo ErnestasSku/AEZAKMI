@@ -5,11 +5,16 @@ import { useState } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { SearchList } from '../../components/SearchList';
 
-export const CoursesList = () => {
+interface Props {
+  creatorId?: string;
+}
+
+export const CoursesList = ({ creatorId }: Props) => {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 500);
-  const { data, isLoading } = useQuery(['courses', debouncedSearch], () =>
-    fetchAllCourses(debouncedSearch)
+  const { data, isLoading } = useQuery(
+    ['courses', creatorId, debouncedSearch],
+    () => fetchAllCourses(creatorId, debouncedSearch)
   );
 
   const renderCoursePreview = (course: Course) => (
