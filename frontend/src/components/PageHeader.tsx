@@ -3,13 +3,24 @@ import { Course } from '../api';
 import { CourseInfo } from './CourseInfo';
 
 interface Props {
+  showVideosCount?: boolean;
+  showViewAll?: boolean;
   course?: Course;
-  title: string;
+  title?: string;
 }
 
-export const PageHeader = ({ course, title }: Props) => {
+export const PageHeader = ({
+  course,
+  title,
+  showVideosCount,
+  showViewAll,
+}: Props) => {
   return course ? (
-    <CourseInfo course={course} />
+    <CourseInfo
+      showVideosCount={showVideosCount}
+      showViewAll={showViewAll}
+      course={course}
+    />
   ) : (
     <Typography sx={{ padding: '20px' }} variant="h4">
       {title}

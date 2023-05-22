@@ -20,7 +20,6 @@ import {
   DialogTitle,
   FormControl,
   FormControlLabel,
-  Paper,
   Radio,
   RadioGroup,
   Stack,
@@ -28,6 +27,7 @@ import {
 } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
 import { useAuth } from '../../hooks/useAuth';
+import { PageHeader } from '../../components/PageHeader';
 
 export const VideoView = withPrivateRoute(() => {
   const { id = '' } = useParams<{ id: string }>();
@@ -64,38 +64,38 @@ export const VideoView = withPrivateRoute(() => {
   return !videoUrl ? (
     <div>Loading...</div>
   ) : (
-    <Stack alignSelf={'center'} alignItems={'center'} padding={'60px'}>
-      <video
-        controls={true}
-        ref={ref}
-        src={videoUrl}
-        style={{ maxWidth: '1300px', width: '100%' }}
-      />
-      <Stack
-        alignItems={'start'}
-        marginTop={'10px'}
-        width={'100%'}
-        gap={3}
-        maxWidth={'1300px'}
-      >
-        <Stack
-          direction={'row'}
-          alignItems={'center'}
-          width={'100%'}
-          justifyContent={'space-between'}
-        >
-          <Typography variant="h4">{video.title}</Typography>
-          <MadeBy creator={video.creator} />
+    <Stack sx={{ marginX: 'auto' }} maxWidth={'1300px'}>
+      {video.course && (
+        <PageHeader showVideosCount showViewAll course={video.course} />
+      )}
+      <Stack alignSelf={'center'} alignItems={'center'} padding={'60px'}>
+        <video
+          controls={true}
+          ref={ref}
+          src={videoUrl}
+          style={{ width: '100%' }}
+        />
+        <Stack alignItems={'start'} marginTop={'10px'} width={'100%'} gap={3}>
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            width={'100%'}
+            justifyContent={'space-between'}
+          >
+            <Typography variant="h4">{video.title}</Typography>
+            <MadeBy creator={video.creator} />
+          </Stack>
+          <Typography variant="subtitle1" textAlign={'left'}>
+            {video.description}
+          </Typography>
         </Stack>
-        <Typography variant="subtitle1" textAlign={'left'}>
-          {video.description}
-        </Typography>
-      </Stack>
 
-      <CourseInfo
-        course={video.course ?? undefined}
-        updateVideoCourse={updateCourse}
-      />
+        <AssignToCourse
+          course={video.course ?? undefined}
+          updateVideoCourse={updateCourse}
+          videoCreatorId={video.creator.id}
+        />
+      </Stack>
     </Stack>
   );
 });
@@ -139,11 +139,13 @@ const MadeBy = ({ creator }: { creator: Creator }) => {
   );
 };
 
-const CourseInfo = ({
+const AssignToCourse = ({
   course,
+  videoCreatorId,
   updateVideoCourse,
 }: {
   course?: Course;
+  videoCreatorId: number;
   updateVideoCourse: (course: Course | null) => void;
 }) => {
   const { user } = useAuth();
@@ -176,7 +178,7 @@ const CourseInfo = ({
         maxWidth: '1300px',
       }}
     >
-      {user?.role === 'TEACHER' && user.id === course?.creator.id && (
+      {user?.role === 'TEACHER' && user.id === videoCreatorId && (
         <Button
           onClick={onClickAssign}
           variant="outlined"
@@ -186,39 +188,7 @@ const CourseInfo = ({
         </Button>
       )}
 
-      {course && (
-        <Paper
-          elevation={3}
-          sx={{
-            marginTop: '10px',
-            padding: '20px',
-            width: '95%',
-            alignSelf: 'center',
-          }}
-        >
-          <Stack>
-            <Stack
-              direction={'row'}
-              justifyContent={'space-between'}
-              alignItems={'center'}
-            >
-              <Typography variant="h6">{course.name}</Typography>
-              <Typography variant="body1">
-                Videos: {course.videoCount}
-              </Typography>
-            </Stack>
-            <Typography color={grey[600]} variant="body1">
-              {course.description}
-            </Typography>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Link to={`/videos?courseId=${course.id}`} state={{ course }}>
-                Show all videos
-              </Link>
-            </div>
-          </Stack>
-        </Paper>
-      )}
-      <AssignToCourse
+      <AssignToCourseDialog
         open={dialogOpen}
         onClose={onDialogClose}
         allCourses={userCoursesData?.data || []}
@@ -229,17 +199,17 @@ const CourseInfo = ({
   );
 };
 
-const AssignToCourse = ({
+const AssignToCourseDialog = ({
   open,
+  onClose,
   allCourses,
   selectedCourseId,
   onUpdate,
-  onClose,
 }: {
-  allCourses: Course[];
   open: boolean;
-  selectedCourseId?: string;
   onClose: () => void;
+  allCourses: Course[];
+  selectedCourseId?: string;
   onUpdate: (courseId: string) => void;
 }) => {
   const [currentCourseId, setCurrentCourseId] = useState<string>(
@@ -257,7 +227,7 @@ const AssignToCourse = ({
     onClose();
   };
 
-  const onClickClose = () => {
+  const onClickCancel = () => {
     setCurrentCourseId(selectedCourseId || '');
     onClose();
   };
@@ -269,7 +239,7 @@ const AssignToCourse = ({
   };
 
   return (
-    <Dialog open={open} scroll="paper" onClose={onClose}>
+    <Dialog open={open} scroll="paper" onClose={onClickCancel}>
       <DialogTitle>Assign video to course</DialogTitle>
       <DialogContent>
         <FormControl>
@@ -290,7 +260,7 @@ const AssignToCourse = ({
         <Button
           color="error"
           style={{ marginLeft: '50px' }}
-          onClick={onClickClose}
+          onClick={onClickCancel}
         >
           Cancel
         </Button>
