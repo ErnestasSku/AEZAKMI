@@ -15,9 +15,7 @@ const Videos = () => {
   return (
     <Stack>
       <PageHeader
-        showHeader={!!courseId}
-        headerTitle={course?.name}
-        headerSubtitle={course?.description}
+        course={course}
         title={`Videos${
           creatorId ? ` by user "${course?.creator.username}"` : ''
         }`}

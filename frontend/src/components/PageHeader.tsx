@@ -1,31 +1,15 @@
-import { Paper, Typography } from '@mui/material';
-import { blueGrey } from '@mui/material/colors';
+import { Typography } from '@mui/material';
+import { Course } from '../api';
+import { CourseInfo } from './CourseInfo';
 
 interface Props {
-  showHeader: boolean;
-  headerTitle?: string;
-  headerSubtitle?: string;
+  course?: Course;
   title: string;
 }
 
-export const PageHeader = ({
-  showHeader,
-  headerTitle,
-  headerSubtitle,
-  title,
-}: Props) => {
-  return showHeader ? (
-    <Paper
-      elevation={3}
-      sx={{ textAlign: 'left', margin: '30px', bgcolor: blueGrey[100] }}
-    >
-      <Typography sx={{ padding: '20px' }} variant="h4">
-        {headerTitle}
-      </Typography>
-      <Typography sx={{ padding: '20px' }} variant="body1">
-        {headerSubtitle}
-      </Typography>
-    </Paper>
+export const PageHeader = ({ course, title }: Props) => {
+  return course ? (
+    <CourseInfo course={course} />
   ) : (
     <Typography sx={{ padding: '20px' }} variant="h4">
       {title}

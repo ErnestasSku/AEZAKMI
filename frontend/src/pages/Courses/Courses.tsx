@@ -15,7 +15,6 @@ const Courses: React.FC = () => {
   return (
     <Stack>
       <PageHeader
-        showHeader={false}
         title={`Courses${creator ? ` by user "${creator.username}"` : ''}`}
       />
       <CoursesList creatorId={creatorId} />
