@@ -23,10 +23,9 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<CourseDTO> getAllCourses(@RequestParam(required = false) Long courseId,
-                                         @RequestParam(required = false) Long creatorId,
+    public List<CourseDTO> getAllCourses(@RequestParam(required = false) Long creatorId,
                                          @RequestParam(required = false) String search) {
-        return courseService.getAllCourses(search);
+        return courseService.getAllCourses(creatorId, search);
     }
 
     @GetMapping("{id}")
