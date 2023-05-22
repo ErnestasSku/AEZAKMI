@@ -36,8 +36,10 @@ export const fetchAllVideoPreviews = ({
     params: { courseId, creatorId },
   });
 
-export const fetchAllCourses = () =>
-  axiosInstance.get<unknown, { data: Course[] }>('/api/courses');
+export const fetchAllCourses = (search: string) =>
+  axiosInstance.get<unknown, { data: Course[] }>('/api/courses', {
+    params: { search },
+  });
 
 export const fetchVideo = (id: string) =>
   axiosInstance.get<unknown, { data: VideoPreview }>(`/api/videos/${id}`);

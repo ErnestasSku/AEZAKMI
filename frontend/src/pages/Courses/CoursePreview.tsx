@@ -25,7 +25,6 @@ export const CoursePreview = ({ course }: Props) => {
         style={{
           display: 'flex',
           flexDirection: 'row',
-          margin: '30px 40px',
           border: '1px solid black',
           minHeight: '150px',
         }}
