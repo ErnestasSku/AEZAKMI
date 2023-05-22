@@ -46,38 +46,16 @@ export const VideosList = ({ courseId, creatorId }: Props) => {
       search={search}
       debouncedSearch={debouncedSearch}
       searchProps={{
-        label: 'Search videos',
+        label: courseId
+          ? 'Search videos in course'
+          : creatorId
+          ? 'Search videos by user'
+          : 'Search all videos',
         placeholder: 'e.g. "How to create a variable in Java?"',
       }}
       getResultsString={getResultsString}
     />
   );
-
-  // return isLoading ? (
-  //   <>
-  //     <div>Loading...</div>
-  //   </>
-  // ) : !chunks[0]?.length ? (
-  //   <div>
-  //     {courseId
-  //       ? 'No videos added to course yet :('
-  //       : creatorId
-  //       ? 'No videos added by creator yet :('
-  //       : 'No videos added yet :('}{' '}
-  //   </div>
-  // ) : (
-  //   <Grid container rowGap={6} padding={'20px 40px'}>
-  //     {chunks.map((chunk, index) => (
-  //       <Grid container key={index} wrap="nowrap" spacing={6}>
-  //         {chunk.map(video => (
-  //           <Grid key={video.id} item xs={4}>
-  //             <VideoPreviewView video={video} />
-  //           </Grid>
-  //         ))}
-  //       </Grid>
-  //     ))}
-  //   </Grid>
-  // );
 };
 
 const getResultsString = (search?: string, size?: number) => {
