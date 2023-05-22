@@ -25,7 +25,6 @@ const SearchListNonMemo = <T,>({
   setSearch,
   searchProps,
 }: SearchListProps<T>) => {
-  console.log('SearchList');
   return (
     <Stack alignItems={'center'} sx={{ paddingX: '40px' }}>
       <TextField

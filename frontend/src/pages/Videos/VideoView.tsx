@@ -92,12 +92,11 @@ export const VideoView = withPrivateRoute(() => {
           {video.description}
         </Typography>
       </Stack>
-      {video.creator.id == user?.id && (
-        <CourseInfo
-          course={video.course ?? undefined}
-          updateVideoCourse={updateCourse}
-        />
-      )}
+
+      <CourseInfo
+        course={video.course ?? undefined}
+        updateVideoCourse={updateCourse}
+      />
     </Stack>
   );
 });
@@ -172,7 +171,7 @@ const CourseInfo = ({
         maxWidth: '1300px',
       }}
     >
-      {user?.role === 'TEACHER' && (
+      {user?.role === 'TEACHER' && user.id === course?.creator.id && (
         <Button
           onClick={onClickAssign}
           variant="outlined"
