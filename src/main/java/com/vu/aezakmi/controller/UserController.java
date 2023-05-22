@@ -37,4 +37,10 @@ public class UserController {
     public List<CourseDTO> getCoursesByCreatorId(@PathVariable Long creatorId) {
         return courseService.getAllCoursesByCreatorId(creatorId);
     }
+
+    @GetMapping("/user")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> getAllRegularUsers() {
+        return userService.getAllRegularUsers();
+    }
 }

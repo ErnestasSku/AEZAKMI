@@ -26,6 +26,10 @@ public class UserService implements UserDetailsService {
         return allUsers.stream().map(UserSignupDTO::new).toList();
     }
 
+    public List<User> getAllRegularUsers() {
+        return userRepository.getAllUsersByRoleId(3L);
+    }
+
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
     }
