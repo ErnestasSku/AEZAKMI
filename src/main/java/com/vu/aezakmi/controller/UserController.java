@@ -1,7 +1,9 @@
 package com.vu.aezakmi.controller;
 
+import com.vu.aezakmi.dto.CourseDTO;
 import com.vu.aezakmi.dto.UserSignupDTO;
 import com.vu.aezakmi.model.User;
+import com.vu.aezakmi.service.CourseService;
 import com.vu.aezakmi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +18,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CourseService courseService;
 
     @PostMapping
     public void saveUser(@RequestBody User user) {
@@ -36,5 +41,11 @@ public class UserController {
             throw new RuntimeException("User not found");
         }
         return userService.getUserById(id).get();
+    }
+  
+    @GetMapping("{creatorId}/courses")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    public List<CourseDTO> getCoursesByCreatorId(@PathVariable Long creatorId) {
+        return courseService.getAllCoursesByCreatorId(creatorId);
     }
 }

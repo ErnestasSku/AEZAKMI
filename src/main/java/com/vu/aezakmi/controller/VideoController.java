@@ -2,9 +2,6 @@ package com.vu.aezakmi.controller;
 
 import com.vu.aezakmi.dto.VideoCreationDTO;
 import com.vu.aezakmi.dto.VideoRetrievalDTO;
-import com.vu.aezakmi.model.Course;
-import com.vu.aezakmi.model.Video;
-import com.vu.aezakmi.service.CourseService;
 import com.vu.aezakmi.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,17 +18,19 @@ public class VideoController {
     @Autowired
     private VideoService videoService;
 
-    @Autowired
-    private CourseService courseService;
-
     @PostMapping
-    public ResponseEntity<?> uploadVideo(@ModelAttribute VideoCreationDTO videoCreationDTO) throws IOException {
-        return videoService.upload(videoCreationDTO);
+    public ResponseEntity<?> uploadVideo(
+            @ModelAttribute VideoCreationDTO videoCreationDTO,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) throws IOException {
+        return videoService.upload(videoCreationDTO, authorizationHeader);
     }
 
     @GetMapping
-    public List<VideoRetrievalDTO> getAllVideos() {
-        return videoService.getAllVideos();
+    public List<VideoRetrievalDTO> getAllVideos(@RequestParam(required = false) Long courseId,
+                                                @RequestParam(required = false) Long creatorId,
+                                                @RequestParam(required = false) String search) {
+        return videoService.getAllVideos(courseId, creatorId, search);
     }
 
     @GetMapping("{id}")
@@ -39,22 +38,18 @@ public class VideoController {
         return videoService.getVideoDtoById(id);
     }
 
-
-    @GetMapping(value = "{id}/data",
-    produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "{id}/data", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public byte[] getVideoData(@PathVariable Long id) {
         return videoService.getVideoData(id);
     }
 
     @PatchMapping("{videoId}/course/{courseId}")
-    public void addVideoToCourse(@PathVariable Long videoId, @PathVariable Long courseId) {
-        Video video = videoService.getVideoById(videoId).orElse(null);
-        if (video != null) {
-            Course course = courseService.getCourseById(courseId).orElse(null);
-            if (course != null) {
-                video.setCourse(course);
-                videoService.updateVideo(video);
-            }
-        }
+    public ResponseEntity<?> addVideoToCourse(@PathVariable Long videoId, @PathVariable Long courseId) {
+        return videoService.addVideoToCourse(videoId, courseId);
+    }
+
+    @PatchMapping("{videoId}/course")
+    public ResponseEntity<?> removeCourseFromVideo(@PathVariable Long videoId) {
+        return videoService.removeCourseFromVideo(videoId);
     }
 }

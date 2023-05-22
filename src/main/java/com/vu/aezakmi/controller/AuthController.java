@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
@@ -23,7 +26,8 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthController(AuthService authService, TokenService tokenService, UserService userService, AuthenticationManager authenticationManager) {
+    public AuthController(AuthService authService, TokenService tokenService, UserService userService,
+                          AuthenticationManager authenticationManager) {
         this.authService = authService;
         this.tokenService = tokenService;
         this.userService = userService;
@@ -39,9 +43,11 @@ public class AuthController {
     public SuccessfulLoginDTO login(@RequestBody UserLoginDTO userLogin) {
         UserDetails userDetails = userService.loadUserByUsername(userLogin.getUsername());
         User user = userService.getUserByUsername(userLogin.getUsername());
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, userLogin.getPassword(), userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails
+                , userLogin.getPassword(), userDetails.getAuthorities());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         String token = tokenService.generateToken(authentication);
-        return new SuccessfulLoginDTO(token, user.getId(), user.getUsername());
+        return new SuccessfulLoginDTO(token, user.getId(), user.getUsername(),
+                user.getRole().getType());
     }
 }

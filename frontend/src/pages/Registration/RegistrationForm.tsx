@@ -11,7 +11,7 @@ import styles from './registration-form.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { TermsAndConditions } from './TermsAndConditions';
-import { registerUser } from '../../api';
+import { registerUser } from '../../api/authApi';
 
 interface FormData {
   username: string;

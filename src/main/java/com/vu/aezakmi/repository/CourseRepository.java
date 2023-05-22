@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
+    List<Course> findByNameContainingIgnoreCase(String name);
+
     @Query("SELECT new com.vu.aezakmi.dto.CourseDTO(c.id, c.name, c.description, c.creator.id) FROM Course c")
     List<CourseDTO> findAllWithCreatorIds();
 
-    @Query("SELECT new com.vu.aezakmi.dto.CourseDTO(c.id, c.name, c.description, c.creator.id) FROM Course c WHERE c.id = :courseId")
-    Optional<CourseDTO> findByIdWithCreatorId(@Param("courseId") Long courseId);
+    @Query("SELECT c FROM Course c WHERE c.creator.id = :creatorId")
+    List<Course> findAllByCreatorId(@Param("creatorId") Long creatorId);
 }

@@ -1,6 +1,6 @@
 package com.vu.aezakmi.dto;
 
-import com.vu.aezakmi.model.RoleType;
+import com.vu.aezakmi.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SuccessfulLoginDTO {
-    private String token;
+public class CreatorDTO {
     private Long id;
     private String username;
-    private RoleType role;
+
+    public CreatorDTO(User creator) {
+        this.id = creator.getId();
+        this.username = creator.getUsername();
+    }
 }
