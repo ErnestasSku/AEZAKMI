@@ -9,12 +9,17 @@ export const useAuth = () => {
     const { data } = await login({ username, password });
     if (data) {
       setToken(data.token);
-      setUser({ username: data.username, id: data.id });
+      setUser({
+        username: data.username,
+        id: data.id,
+        role: data.role,
+      });
     }
   }, []);
 
   const logoutUser = useCallback(() => {
     setToken(null);
+    setUser(null);
   }, []);
 
   return {

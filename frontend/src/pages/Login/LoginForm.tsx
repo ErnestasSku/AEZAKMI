@@ -24,8 +24,13 @@ export const LoginForm = () => {
   const { login } = useAuth();
 
   const onSubmit = async ({ username, password }: FormData) => {
-    await login(username, password);
-    navigate('/home');
+    try {
+      await login(username, password);
+    } catch (e) {
+      alert('Wrong username or password');
+      return;
+    }
+    navigate('/');
   };
 
   return (

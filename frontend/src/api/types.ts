@@ -19,7 +19,8 @@ export interface VideoPreview {
   title: string;
   description?: string;
   imageUrl: string;
-  courseId?: number;
+  course?: Course | null;
+  creator: Creator;
 }
 
 export interface VideoData {
@@ -34,21 +35,36 @@ export interface UploadVideoRequest {
   courseId?: number;
 }
 
+export interface CreateCourseRequest {
+  name: string;
+  description: string;
+  videoIds?: string[];
+}
+
 export interface LoginRequest {
   username: string;
   password: string;
 }
 
+export type Role = 'ADMIN' | 'TEACHER' | 'USER';
+
 export interface LoggedInUser {
   id: number;
   username: string;
+  role: Role;
 }
 
 export interface Course {
   id: number;
   name: string;
   description: string;
-  creatorId: number;
+  creator: Creator;
+  videoCount: number;
+}
+
+export interface Creator {
+  id: number;
+  username: string;
 }
 
 export type LoginResponse = ApiResponse<

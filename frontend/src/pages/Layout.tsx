@@ -1,10 +1,18 @@
-import { Logout, VideoCameraBack } from '@mui/icons-material';
-import { AppBar, Button, IconButton, MenuItem, Toolbar } from '@mui/material';
+import { Add, Logout, VideoCameraBack } from '@mui/icons-material';
+import {
+  AppBar,
+  Button,
+  IconButton,
+  MenuItem,
+  Stack,
+  Toolbar,
+} from '@mui/material';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { roleToString } from '../utils/role';
 
-const PAGES = ['Home', 'Courses', 'Users', 'Videos'];
+const PAGES = ['Courses', 'Videos'];
 
 const Layout: React.FC = () => {
   const { isLoggedIn, logout, user } = useAuth();
@@ -24,7 +32,11 @@ const Layout: React.FC = () => {
           {PAGES.map(page => (
             <MenuItem key={page}>
               <Link
-                style={{ textDecoration: 'none', color: 'white' }}
+                style={{
+                  textDecoration: 'none',
+                  color: 'white',
+                  fontSize: '1.1rem',
+                }}
                 to={page.toLowerCase()}
               >
                 {page}
@@ -40,17 +52,38 @@ const Layout: React.FC = () => {
             gap: '30px',
           }}
         >
-          <Link to={'/videos/upload'}>
-            <Button
-              style={{ backgroundColor: 'white', color: 'black' }}
-              variant="contained"
-              startIcon={<VideoCameraBack />}
-            >
-              Upload video
-            </Button>
-          </Link>
+          {user?.role != 'USER' && (
+            <>
+              <Link to={'/courses/create'}>
+                <Button
+                  style={{ backgroundColor: 'white', color: 'black' }}
+                  variant="contained"
+                  startIcon={<Add />}
+                >
+                  Create course
+                </Button>
+              </Link>
+              <Link to={'/videos/upload'}>
+                <Button
+                  style={{ backgroundColor: 'white', color: 'black' }}
+                  variant="contained"
+                  startIcon={<VideoCameraBack />}
+                >
+                  Upload video
+                </Button>
+              </Link>
+            </>
+          )}
+
           <>
-            <span>{user?.username}</span>
+            <Stack>
+              <div style={{ fontSize: '1.3rem', fontWeight: 'bolder' }}>
+                {user?.username}
+              </div>
+              <div style={{ fontSize: '0.9rem' }}>
+                {roleToString(user?.role)}
+              </div>
+            </Stack>
             <IconButton style={{ color: 'white' }} onClick={logoutHandler}>
               <Logout>Logout</Logout>
             </IconButton>

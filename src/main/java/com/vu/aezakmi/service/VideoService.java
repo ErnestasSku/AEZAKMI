@@ -1,7 +1,8 @@
 package com.vu.aezakmi.service;
 
+import com.vu.aezakmi.dto.CourseDTO;
+import com.vu.aezakmi.dto.CreatorDTO;
 import com.vu.aezakmi.dto.VideoCreationDTO;
-import com.vu.aezakmi.dto.VideoCreatorDTO;
 import com.vu.aezakmi.dto.VideoRetrievalDTO;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.Image;
@@ -71,8 +72,8 @@ public class VideoService {
         // get user
         String token = authorizationHeader.substring("Bearer ".length());
         String username = tokenService.getUsernameFromToken(token);
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not" +
+                " found"));
         video.setUser(user);
 
         // save video
@@ -81,10 +82,11 @@ public class VideoService {
         return new ResponseEntity<>("Video with ID " + uploadedVideo.getId() + " got created", HttpStatus.CREATED);
     }
 
-    public List<VideoRetrievalDTO> getAllVideos(String search) {
+    public List<VideoRetrievalDTO> getAllVideos(Long courseId, Long creatorId, String search) {
         List<VideoRetrievalDTO> videoRetrievalDTOs = new ArrayList<>();
-        List<Video> videos =
-                search == null ? videoRepository.findAll() : videoRepository.findByTitleContainingIgnoreCase(search);
+        List<Video> videos = courseId != null ? videoRepository.findAllByCourseId(courseId) : creatorId != null ?
+                videoRepository.findAllByCreatorId(creatorId) : search != null ?
+                videoRepository.findByTitleContainingIgnoreCase(search) : videoRepository.findAll();
         for (Video video : videos) {
             VideoRetrievalDTO videoRetrievalDTO = setVideoDTO(video);
             videoRetrievalDTOs.add(videoRetrievalDTO);
@@ -98,16 +100,15 @@ public class VideoService {
         videoRetrievalDTO.setId(video.getId() != null ? video.getId() : null);
         videoRetrievalDTO.setTitle(video.getTitle() != null ? video.getTitle() : null);
         videoRetrievalDTO.setDescription(video.getDescription() != null ? video.getDescription() : null);
-        videoRetrievalDTO.setCourseId(video.getCourse() != null ? video.getCourse().getId() : null);
+        videoRetrievalDTO.setCourse(video.getCourse() != null ? new CourseDTO(video.getCourse()) : null);
         videoRetrievalDTO.setImageUrl(video.getImage() != null ?
-                ("http://localhost:" + serverPortService.getPort() + "/api/images/" + video.getImage().getId())
-                : null);
+                ("http://localhost:" + serverPortService.getPort() + "/api/images/" + video.getImage().getId()) : null);
 
         if (video.getUser() != null) {
-            VideoCreatorDTO videoCreatorDTO = new VideoCreatorDTO();
-            videoCreatorDTO.setId(video.getUser().getId());
-            videoCreatorDTO.setUsername(video.getUser().getUsername());
-            videoRetrievalDTO.setCreator(videoCreatorDTO);
+            CreatorDTO creatorDTO = new CreatorDTO();
+            creatorDTO.setId(video.getUser().getId());
+            creatorDTO.setUsername(video.getUser().getUsername());
+            videoRetrievalDTO.setCreator(creatorDTO);
         }
         return videoRetrievalDTO;
     }
@@ -137,10 +138,18 @@ public class VideoService {
 
         video.setCourse(course);
         videoRepository.save(video);
-        return new ResponseEntity<>(
-                "Video (id: " + video.getId() + ") was added to course (id: " + course.getId() + ")",
-                HttpStatus.OK
-        );
+        return new ResponseEntity<>("Video (id: " + video.getId() + ") was added to course (id: " + course.getId() +
+                ")", HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> removeCourseFromVideo(Long videoId) {
+        Video video = videoRepository.findById(videoId).orElse(null);
+        if (video == null) {
+            return new ResponseEntity<>("Video with specified Id does not exist", HttpStatus.BAD_REQUEST);
+        }
+        video.setCourse(null);
+        videoRepository.save(video);
+        return new ResponseEntity<>("Course was removed from Video (id: " + video.getId() + ")", HttpStatus.OK);
     }
 
     public byte[] getVideoData(Long id) {

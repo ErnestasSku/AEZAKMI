@@ -1,6 +1,8 @@
 package com.vu.aezakmi.service;
 
+import com.vu.aezakmi.dto.CourseCreationDTO;
 import com.vu.aezakmi.dto.CourseDTO;
+import com.vu.aezakmi.dto.CreatorDTO;
 import com.vu.aezakmi.model.Course;
 import com.vu.aezakmi.model.RoleType;
 import com.vu.aezakmi.model.User;
@@ -11,11 +13,13 @@ import com.vu.aezakmi.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -28,27 +32,34 @@ public class CourseService {
     @Autowired
     VideoRepository videoRepository;
 
-    public ResponseEntity<?> create(CourseDTO courseDto) {
-        // validation
-        Long creatorId = courseDto.getCreatorId();
-        if (creatorId == null) {
-            return new ResponseEntity<>("creatorID should be set", HttpStatus.BAD_REQUEST);
-        }
-        User user = userRepository.findById(creatorId).orElse(null);
-        if (user == null) {
-            return new ResponseEntity<>("No user with exists with provided creatorId", HttpStatus.BAD_REQUEST);
-        } else if (user.getRole().getType() != RoleType.TEACHER) {
+    @Autowired
+    TokenService tokenService;
+
+    public ResponseEntity<?> create(CourseCreationDTO courseDto, String authorizationHeader) {
+        // get user
+        String token = authorizationHeader.substring("Bearer ".length());
+        String username = tokenService.getUsernameFromToken(token);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not" +
+                " found"));
+
+        if (user.getRole().getType() != RoleType.TEACHER) {
             return new ResponseEntity<>("You do not have access for this action", HttpStatus.FORBIDDEN);
         }
 
         // create course
         Course course = new Course();
+        course.setCreator(user);
         course.setName(courseDto.getName());
         course.setDescription(courseDto.getDescription());
-        course.setCreator(user);
-
         // save course
         Course createdCourse = courseRepository.save(course);
+
+        List<Long> videoIds = courseDto.getVideoIds();
+        if (videoIds != null) {
+            List<Video> videos = videoRepository.findByIdIn(videoIds);
+            videos.forEach(video -> video.setCourse(createdCourse));
+            videoRepository.saveAll(videos);
+        }
 
         return new ResponseEntity<>("Course with ID " + createdCourse.getId() + " got created", HttpStatus.CREATED);
     }
@@ -79,17 +90,20 @@ public class CourseService {
         courseDTO.setId(course.getId() != null ? course.getId() : null);
         courseDTO.setName(course.getName() != null ? course.getName() : null);
         courseDTO.setDescription(course.getDescription() != null ? course.getDescription() : null);
-        courseDTO.setCreatorId(course.getCreator() != null ? course.getCreator().getId() : null);
+        courseDTO.setVideoCount(course.getVideos().size());
+        if (course.getCreator() != null) {
+            CreatorDTO creatorDTO = new CreatorDTO();
+            creatorDTO.setId(course.getCreator().getId());
+            creatorDTO.setUsername(course.getCreator().getUsername());
+            courseDTO.setCreator(creatorDTO);
+        }
 
         return courseDTO;
     }
 
     public List<CourseDTO> getAllCoursesByCreatorId(Long creatorId) {
-        return courseRepository.findAllByCreatorId(creatorId);
-    }
-
-    public Optional<CourseDTO> getCourseByIdWithCreatorId(Long id) {
-        return courseRepository.findByIdWithCreatorId(id);
+        List<Course> courses = courseRepository.findAllByCreatorId(creatorId);
+        return courses.stream().map(course -> new CourseDTO(course)).collect(Collectors.toList());
     }
 
     public ResponseEntity<?> addVideoToCourse(Long courseId, Long videoId) {

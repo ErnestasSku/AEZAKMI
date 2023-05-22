@@ -27,8 +27,10 @@ public class VideoController {
     }
 
     @GetMapping
-    public List<VideoRetrievalDTO> getAllVideos(@RequestParam(required = false) String search) {
-        return videoService.getAllVideos(search);
+    public List<VideoRetrievalDTO> getAllVideos(@RequestParam(required = false) Long courseId,
+                                                @RequestParam(required = false) Long creatorId,
+                                                @RequestParam(required = false) String search) {
+        return videoService.getAllVideos(courseId, creatorId, search);
     }
 
     @GetMapping("{id}")
@@ -36,9 +38,7 @@ public class VideoController {
         return videoService.getVideoDtoById(id);
     }
 
-
-    @GetMapping(value = "{id}/data",
-    produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "{id}/data", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public byte[] getVideoData(@PathVariable Long id) {
         return videoService.getVideoData(id);
     }
@@ -46,5 +46,10 @@ public class VideoController {
     @PatchMapping("{videoId}/course/{courseId}")
     public ResponseEntity<?> addVideoToCourse(@PathVariable Long videoId, @PathVariable Long courseId) {
         return videoService.addVideoToCourse(videoId, courseId);
+    }
+
+    @PatchMapping("{videoId}/course")
+    public ResponseEntity<?> removeCourseFromVideo(@PathVariable Long videoId) {
+        return videoService.removeCourseFromVideo(videoId);
     }
 }

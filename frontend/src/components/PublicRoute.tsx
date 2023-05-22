@@ -3,7 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 
 export const PublicRoute = ({ children }: { children: JSX.Element }) => {
   const { isLoggedIn } = useAuth();
-  return isLoggedIn ? <Navigate to="/home" /> : children;
+  return isLoggedIn ? <Navigate to="/" /> : children;
 };
 
 export const withPublicRoute = (Component: React.FC) => {
