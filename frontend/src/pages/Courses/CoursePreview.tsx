@@ -74,7 +74,7 @@ export const CoursePreview = ({ course }: Props) => {
               by
               <Link
                 onClick={onClickCreator}
-                to={`/videos?creatorId=${course.creator.id}`}
+                to={`/courses?creatorId=${course.creator.id}`}
                 state={{ course }}
               >
                 <Box
