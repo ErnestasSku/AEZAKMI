@@ -21,9 +21,8 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public List<UserSignupDTO> getUsers() {
-        List<User> allUsers =  userRepository.findAll();
-        return allUsers.stream().map(UserSignupDTO::new).toList();
+    public List<User> getUsers() {
+        return userRepository.findAll();
     }
 
     public Optional<User> getUserById(Long id) {

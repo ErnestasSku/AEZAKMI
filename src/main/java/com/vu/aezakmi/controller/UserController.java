@@ -23,8 +23,8 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
-    public List<UserSignupDTO> getUsers() {
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> getUsers() {
         return userService.getUsers();
     }
 
