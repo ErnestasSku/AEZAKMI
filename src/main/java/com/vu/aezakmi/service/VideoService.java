@@ -69,7 +69,7 @@ public class VideoService {
         video.setTitle(videoCreationDTO.getTitle());
         video.setDescription(videoCreationDTO.getDescription());
         video.setImage(uploadedImage);
-        video.setData(videoCreationDTO.getVideo().getBytes());
+        video.setData(videoCreationDTO.getVideo().getInputStream().readAllBytes());
         if (videoCreationDTO.getCourseId() != null) {
             courseRepository.findById(videoCreationDTO.getCourseId()).ifPresent(video::setCourse);
         }
