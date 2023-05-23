@@ -4,7 +4,7 @@ import {
   Course,
   CreateCourseRequest,
   UploadVideoRequest,
-  User,
+  FullUser,
   VideoData,
   VideoPreview,
 } from '.';
@@ -23,7 +23,7 @@ axiosInstance.interceptors.request.use(config => {
 });
 
 export const fetchAllUsers = () =>
-  axiosInstance.get<unknown, { data: User[] }>('/api/users');
+  axiosInstance.get<unknown, { data: FullUser[] }>('/api/users');
 
 export const fetchAllVideoPreviews = ({
   courseId,
@@ -68,3 +68,6 @@ export const updateVideoCourse = (videoId: string, courseId?: string) => {
   }
   return axiosInstance.patch(`/api/videos/${videoId}/course`);
 };
+
+export const assignUserToTeacher = (user: FullUser) =>
+  axiosInstance.post('/api/users/teacher', user);
