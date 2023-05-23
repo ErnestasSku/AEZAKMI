@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -27,11 +28,21 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
-    public List<UserSignupDTO> getUsers() {
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> getUsers() {
         return userService.getUsers();
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public User getUser(@PathVariable Long id) {
+        Optional<User> potentialUser = userService.getUserById(id);
+        if(potentialUser.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+        return userService.getUserById(id).get();
+    }
+  
     @GetMapping("{creatorId}/courses")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public List<CourseDTO> getCoursesByCreatorId(@PathVariable Long creatorId) {
