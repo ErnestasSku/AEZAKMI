@@ -1,4 +1,11 @@
-import { Add, Logout, VideoCameraBack } from '@mui/icons-material';
+import {
+  Add,
+  Logout,
+  Menu as MenuIcon,
+  PlayLesson,
+  School,
+  VideoCameraBack,
+} from '@mui/icons-material';
 import {
   AppBar,
   Button,
@@ -6,8 +13,11 @@ import {
   MenuItem,
   Stack,
   Toolbar,
+  Menu,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { roleToString } from '../utils/role';
@@ -17,6 +27,8 @@ const PAGES = ['Courses', 'Videos'];
 const Layout: React.FC = () => {
   const { isLoggedIn, logout, user } = useAuth();
   const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   const logoutHandler = () => {
     if (confirm('Are you sure you want to log out?')) {
@@ -24,6 +36,75 @@ const Layout: React.FC = () => {
       navigate('/login');
     }
   };
+
+  const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const closeMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const onClickMyCourses = () => {
+    closeMenu();
+    navigate(`/courses?creatorId=${user!.id}`);
+  };
+
+  const onClickMyVideos = () => {
+    closeMenu();
+    navigate(`/videos?creatorId=${user!.id}`);
+  };
+
+  const onClickSignOut = () => {
+    closeMenu();
+    logoutHandler();
+  };
+
+  const onClickAssignTeachers = () => {
+    closeMenu();
+    console.log('ASSIGN TEACHERS');
+  };
+
+  const myCoursesItem = (
+    <MenuItem key={'my-courses'} onClick={onClickMyCourses}>
+      <ListItemIcon>
+        <PlayLesson />
+      </ListItemIcon>
+      <ListItemText>My courses</ListItemText>
+    </MenuItem>
+  );
+  const myVideosItem = (
+    <MenuItem key={'my-videos'} onClick={onClickMyVideos}>
+      <ListItemIcon>
+        <VideoCameraBack />
+      </ListItemIcon>
+      <ListItemText>My videos</ListItemText>
+    </MenuItem>
+  );
+  const signOutItem = (
+    <MenuItem key={'sign-out'} onClick={onClickSignOut}>
+      <ListItemIcon>
+        <Logout />
+      </ListItemIcon>
+      <ListItemText>Sign out</ListItemText>
+    </MenuItem>
+  );
+  const assignTeachersItem = (
+    <MenuItem key={'assign-teachers'} onClick={onClickAssignTeachers}>
+      <ListItemIcon>
+        <School />
+      </ListItemIcon>
+      <ListItemText>Assign teachers</ListItemText>
+    </MenuItem>
+  );
+
+  const menuItems = [
+    user?.role === 'TEACHER' && [myCoursesItem, myVideosItem],
+    user?.role === 'ADMIN' && [assignTeachersItem],
+    signOutItem,
+  ]
+    .flat()
+    .filter(Boolean);
 
   return isLoggedIn ? (
     <AppBar position="static">
@@ -84,9 +165,17 @@ const Layout: React.FC = () => {
                 {roleToString(user?.role)}
               </div>
             </Stack>
-            <IconButton style={{ color: 'white' }} onClick={logoutHandler}>
-              <Logout>Logout</Logout>
+            <IconButton style={{ color: 'white' }} onClick={openMenu}>
+              <MenuIcon />
             </IconButton>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={closeMenu}
+              sx={{ outline: 'none' }}
+              children={menuItems}
+            />
           </>
         </div>
       </Toolbar>
