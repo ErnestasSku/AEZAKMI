@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   Course,
   Creator,
+  LoggedInUser,
   VideoPreview,
   fetchUserCourses,
   fetchVideoBlob,
@@ -30,6 +31,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { PageHeader } from '../../components/PageHeader';
 
 export const VideoView = withPrivateRoute(() => {
+  const { user } = useAuth();
   const { id = '' } = useParams<{ id: string }>();
   const { data: blob } = useQuery(`video-blob-${id}`, () => fetchVideoBlob(id));
   const [videoUrl, setVideoUrl] = useState('');
@@ -90,11 +92,13 @@ export const VideoView = withPrivateRoute(() => {
           </Typography>
         </Stack>
 
-        <AssignToCourse
-          course={video.course ?? undefined}
-          updateVideoCourse={updateCourse}
-          videoCreatorId={video.creator.id}
-        />
+        {user?.role === 'TEACHER' && user.id === video.creator.id ? (
+          <AssignToCourse
+            user={user}
+            course={video.course ?? undefined}
+            updateVideoCourse={updateCourse}
+          />
+        ) : null}
       </Stack>
     </Stack>
   );
@@ -140,15 +144,14 @@ const MadeBy = ({ creator }: { creator: Creator }) => {
 };
 
 const AssignToCourse = ({
+  user,
   course,
-  videoCreatorId,
   updateVideoCourse,
 }: {
+  user: LoggedInUser;
   course?: Course;
-  videoCreatorId: number;
   updateVideoCourse: (course: Course | null) => void;
 }) => {
-  const { user } = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
   const { data: userCoursesData } = useQuery(`user-courses-${user!.id}`, () =>
     fetchUserCourses(user!.id)
@@ -178,15 +181,13 @@ const AssignToCourse = ({
         maxWidth: '1300px',
       }}
     >
-      {user?.role === 'TEACHER' && user.id === videoCreatorId && (
-        <Button
-          onClick={onClickAssign}
-          variant="outlined"
-          sx={{ alignSelf: 'center' }}
-        >
-          {course ? 'Assign to different course' : 'Assign video to a course'}
-        </Button>
-      )}
+      <Button
+        onClick={onClickAssign}
+        variant="outlined"
+        sx={{ alignSelf: 'center' }}
+      >
+        {course ? 'Assign to different course' : 'Assign video to a course'}
+      </Button>
 
       <AssignToCourseDialog
         open={dialogOpen}
