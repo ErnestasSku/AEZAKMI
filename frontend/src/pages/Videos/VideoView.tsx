@@ -64,11 +64,11 @@ export const VideoView = withPrivateRoute(() => {
   return !videoUrl ? (
     <div>Loading...</div>
   ) : (
-    <Stack sx={{ marginX: 'auto' }} maxWidth={'1300px'}>
+    <Stack sx={{ marginX: 'auto', padding: '60px' }} maxWidth={'1300px'}>
       {video.course && (
         <PageHeader showVideosCount showViewAll course={video.course} />
       )}
-      <Stack alignSelf={'center'} alignItems={'center'} padding={'60px'}>
+      <Stack width={'100%'} alignSelf={'center'} alignItems={'center'}>
         <video
           controls={true}
           ref={ref}
