@@ -40,7 +40,9 @@ public class SetupDataLoader implements
         createRoleIfNotFound(RoleType.TEACHER);
         createRoleIfNotFound(RoleType.USER);
 
-        createUserIfNotFound("admin", "admin", "admin@admin.lt", RoleType.ADMIN);
+        createUserIfNotFound("admin1", "admin1", "admin1@admin.lt", RoleType.ADMIN);
+        createUserIfNotFound("admin2", "admin2", "admin2@admin.lt", RoleType.ADMIN);
+
 
         alreadySetup = true;
     }
