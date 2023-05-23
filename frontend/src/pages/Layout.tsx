@@ -62,7 +62,7 @@ const Layout: React.FC = () => {
 
   const onClickAssignTeachers = () => {
     closeMenu();
-    console.log('ASSIGN TEACHERS');
+    navigate('/teachers/assign');
   };
 
   const myCoursesItem = (

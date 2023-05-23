@@ -9,6 +9,7 @@ import Registration from './pages/Registration';
 import Videos, { VideoView } from './pages/Videos';
 import UploadVideo from './pages/UploadVideo';
 import CreateCourse from './pages/CreateCourse';
+import AssignTeachers from './pages/AssignTeachers';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="videos" element={<Videos />} />
         <Route path="videos/:id" element={<VideoView />} />
         <Route path="videos/upload" element={<UploadVideo />} />
+        <Route path="teachers/assign" element={<AssignTeachers />} />
         <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>
