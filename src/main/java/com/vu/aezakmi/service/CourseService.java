@@ -10,7 +10,12 @@ import com.vu.aezakmi.model.Video;
 import com.vu.aezakmi.repository.CourseRepository;
 import com.vu.aezakmi.repository.UserRepository;
 import com.vu.aezakmi.repository.VideoRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -64,10 +69,21 @@ public class CourseService {
         return new ResponseEntity<>("Course with ID " + createdCourse.getId() + " got created", HttpStatus.CREATED);
     }
 
-    public List<CourseDTO> getAllCourses(String search) {
+    public List<CourseDTO> getAllCourses(Long creatorId, String search) {
+        Specification<Course> specification = (Root<Course> root, CriteriaQuery<?> query,
+                                               CriteriaBuilder criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (creatorId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("creator").get("id"), creatorId));
+            }
+            if (search != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")),
+                        "%" + search.toLowerCase() + "%"));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
         List<CourseDTO> courseDTOs = new ArrayList<>();
-        List<Course> courses = search == null ? courseRepository.findAll()
-                : courseRepository.findByNameContainingIgnoreCase(search);
+        List<Course> courses = courseRepository.findAll(specification);
         for (Course course : courses) {
             CourseDTO courseDTO = setCourseDTO(course);
             courseDTOs.add(courseDTO);

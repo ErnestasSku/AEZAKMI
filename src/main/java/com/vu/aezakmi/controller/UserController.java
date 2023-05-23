@@ -1,9 +1,10 @@
 package com.vu.aezakmi.controller;
 
 import com.vu.aezakmi.dto.CourseDTO;
-import com.vu.aezakmi.dto.UserSignupDTO;
+import com.vu.aezakmi.model.RoleType;
 import com.vu.aezakmi.model.User;
 import com.vu.aezakmi.service.CourseService;
+import com.vu.aezakmi.service.RoleService;
 import com.vu.aezakmi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +23,9 @@ public class UserController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private RoleService roleService;
+
     @PostMapping
     public void saveUser(@RequestBody User user) {
         userService.save(user);
@@ -37,15 +41,21 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public User getUser(@PathVariable Long id) {
         Optional<User> potentialUser = userService.getUserById(id);
-        if(potentialUser.isEmpty()) {
+        if (potentialUser.isEmpty()) {
             throw new RuntimeException("User not found");
         }
         return userService.getUserById(id).get();
     }
-  
+
     @GetMapping("{creatorId}/courses")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public List<CourseDTO> getCoursesByCreatorId(@PathVariable Long creatorId) {
         return courseService.getAllCoursesByCreatorId(creatorId);
+    }
+
+    @PostMapping("/teacher")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void updateRole(@RequestBody User user) {
+        roleService.updateRole(user, RoleType.TEACHER);
     }
 }

@@ -1,11 +1,18 @@
 import { AxiosResponse } from 'axios';
 
-export interface User {
-  id: number;
+export interface FullUser {
+  id: string;
   email: string;
   password: string;
   username: string;
-  role_id: unknown;
+  version: number;
+  role: FullUserRole;
+}
+
+interface FullUserRole {
+  id: string;
+  type: Role;
+  authority: Role;
 }
 
 export interface RegisterUserRequest {

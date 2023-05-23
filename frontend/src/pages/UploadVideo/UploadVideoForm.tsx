@@ -113,6 +113,7 @@ export const UploadVideoForm = () => {
               autoFocus
               helperText={error ? error.message : null}
               minRows={3}
+              inputProps={{ maxLength: 255 }}
             />
           )}
         />

@@ -12,7 +12,12 @@ import com.vu.aezakmi.repository.CourseRepository;
 import com.vu.aezakmi.repository.ImageRepository;
 import com.vu.aezakmi.repository.UserRepository;
 import com.vu.aezakmi.repository.VideoRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -64,7 +69,7 @@ public class VideoService {
         video.setTitle(videoCreationDTO.getTitle());
         video.setDescription(videoCreationDTO.getDescription());
         video.setImage(uploadedImage);
-        video.setData(videoCreationDTO.getVideo().getBytes());
+        video.setData(videoCreationDTO.getVideo().getInputStream().readAllBytes());
         if (videoCreationDTO.getCourseId() != null) {
             courseRepository.findById(videoCreationDTO.getCourseId()).ifPresent(video::setCourse);
         }
@@ -83,10 +88,24 @@ public class VideoService {
     }
 
     public List<VideoRetrievalDTO> getAllVideos(Long courseId, Long creatorId, String search) {
+        Specification<Video> specification = (Root<Video> root, CriteriaQuery<?> query,
+                                              CriteriaBuilder criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (courseId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("course").get("id"), courseId));
+            }
+            if (creatorId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("user").get("id"), creatorId));
+            }
+            if (search != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("title")),
+                        "%" + search.toLowerCase() + "%"));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
         List<VideoRetrievalDTO> videoRetrievalDTOs = new ArrayList<>();
-        List<Video> videos = courseId != null ? videoRepository.findAllByCourseId(courseId) : creatorId != null ?
-                videoRepository.findAllByCreatorId(creatorId) : search != null ?
-                videoRepository.findByTitleContainingIgnoreCase(search) : videoRepository.findAll();
+        List<Video> videos = videoRepository.findAll(specification);
         for (Video video : videos) {
             VideoRetrievalDTO videoRetrievalDTO = setVideoDTO(video);
             videoRetrievalDTOs.add(videoRetrievalDTO);
