@@ -1,6 +1,6 @@
 package com.vu.aezakmi.service;
 
-import com.vu.aezakmi.exceptions.OptmisticLockingConflictException;
+import com.vu.aezakmi.exceptions.OptimisticLockingConflictException;
 import com.vu.aezakmi.model.Role;
 import com.vu.aezakmi.model.RoleType;
 import com.vu.aezakmi.model.User;
@@ -39,7 +39,7 @@ public class RoleService {
             user.setRole(role);
             userRepository.save(user);
         } catch(ObjectOptimisticLockingFailureException e) {
-            throw new OptmisticLockingConflictException();
+            throw new OptimisticLockingConflictException();
         }
     }
 }
