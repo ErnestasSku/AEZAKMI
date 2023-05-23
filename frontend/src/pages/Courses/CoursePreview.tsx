@@ -2,12 +2,14 @@ import { Box, Paper, Stack, Typography } from '@mui/material';
 import { Course } from '../../api';
 import { Link, useNavigate } from 'react-router-dom';
 import { MouseEvent } from 'react';
+import { useQueryClient } from 'react-query';
 
 interface Props {
   course: Course;
 }
 
 export const CoursePreview = ({ course }: Props) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const onClick = () => {
@@ -15,6 +17,10 @@ export const CoursePreview = ({ course }: Props) => {
   };
 
   const onClickCreator = (e: MouseEvent) => {
+    queryClient.setQueryData(
+      ['creators', course.creator.id.toString()],
+      course.creator
+    );
     e.stopPropagation();
   };
 
@@ -25,7 +31,6 @@ export const CoursePreview = ({ course }: Props) => {
         style={{
           display: 'flex',
           flexDirection: 'row',
-          margin: '30px 40px',
           border: '1px solid black',
           minHeight: '150px',
         }}
@@ -69,7 +74,7 @@ export const CoursePreview = ({ course }: Props) => {
               by
               <Link
                 onClick={onClickCreator}
-                to={`/videos?creatorId=${course.creator.id}`}
+                to={`/courses?creatorId=${course.creator.id}`}
                 state={{ course }}
               >
                 <Box

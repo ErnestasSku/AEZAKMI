@@ -28,16 +28,20 @@ export const fetchAllUsers = () =>
 export const fetchAllVideoPreviews = ({
   courseId,
   creatorId,
+  search,
 }: {
   courseId?: string;
   creatorId?: string;
+  search?: string;
 }) =>
   axiosInstance.get<unknown, { data: VideoPreview[] }>('/api/videos', {
-    params: { courseId, creatorId },
+    params: { courseId, creatorId, search },
   });
 
-export const fetchAllCourses = () =>
-  axiosInstance.get<unknown, { data: Course[] }>('/api/courses');
+export const fetchAllCourses = (creatorId?: string, search?: string) =>
+  axiosInstance.get<unknown, { data: Course[] }>('/api/courses', {
+    params: { creatorId, search },
+  });
 
 export const fetchVideo = (id: string) =>
   axiosInstance.get<unknown, { data: VideoPreview }>(`/api/videos/${id}`);
