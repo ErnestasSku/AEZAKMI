@@ -3,13 +3,13 @@ import { withAdminRoute } from '../../components/AdminRoute';
 import { PageHeader } from '../../components/PageHeader';
 import { UsersList } from './UsersList';
 
-const AssignTeachers = withAdminRoute(() => {
+const ManageUsers = withAdminRoute(() => {
   return (
     <Stack maxWidth={'1400px'} margin="auto" alignItems={'center'}>
-      <PageHeader title="Assign teachers" />
+      <PageHeader title="Manage users" />
       <UsersList />
     </Stack>
   );
 });
 
-export default AssignTeachers;
+export default ManageUsers;
