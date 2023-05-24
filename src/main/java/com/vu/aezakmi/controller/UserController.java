@@ -55,7 +55,13 @@ public class UserController {
 
     @PostMapping("/teacher")
     @PreAuthorize("hasRole('ADMIN')")
-    public void updateRole(@RequestBody User user) {
+    public void updateRoleToTeacher(@RequestBody User user) {
         roleService.updateRole(user, RoleType.TEACHER);
+    }
+
+    @PostMapping("/user")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void updateRoleToUser(@RequestBody User user) {
+        roleService.updateRole(user, RoleType.USER);
     }
 }
