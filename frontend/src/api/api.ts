@@ -71,3 +71,6 @@ export const updateVideoCourse = (videoId: string, courseId?: string) => {
 
 export const assignUserToTeacher = (user: FullUser) =>
   axiosInstance.post('/api/users/teacher', user);
+
+export const removeTeacherFromUser = (user: FullUser) =>
+  axiosInstance.post('/api/users/user', user);

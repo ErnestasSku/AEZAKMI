@@ -2,8 +2,8 @@ import {
   Add,
   Logout,
   Menu as MenuIcon,
+  Person,
   PlayLesson,
-  School,
   VideoCameraBack,
 } from '@mui/icons-material';
 import {
@@ -60,9 +60,9 @@ const Layout: React.FC = () => {
     logoutHandler();
   };
 
-  const onClickAssignTeachers = () => {
+  const onClickManageUsers = () => {
     closeMenu();
-    navigate('/teachers/assign');
+    navigate('/users/manage');
   };
 
   const myCoursesItem = (
@@ -89,18 +89,18 @@ const Layout: React.FC = () => {
       <ListItemText>Sign out</ListItemText>
     </MenuItem>
   );
-  const assignTeachersItem = (
-    <MenuItem key={'assign-teachers'} onClick={onClickAssignTeachers}>
+  const manageUsersItem = (
+    <MenuItem key={'manage-users'} onClick={onClickManageUsers}>
       <ListItemIcon>
-        <School />
+        <Person />
       </ListItemIcon>
-      <ListItemText>Assign teachers</ListItemText>
+      <ListItemText>Manage users</ListItemText>
     </MenuItem>
   );
 
   const menuItems = [
     user?.role === 'TEACHER' && [myCoursesItem, myVideosItem],
-    user?.role === 'ADMIN' && [assignTeachersItem],
+    user?.role === 'ADMIN' && [manageUsersItem],
     signOutItem,
   ]
     .flat()

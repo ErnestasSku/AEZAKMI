@@ -10,7 +10,12 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation, useQuery } from 'react-query';
-import { FullUser, assignUserToTeacher, fetchAllUsers } from '../../api';
+import {
+  FullUser,
+  assignUserToTeacher,
+  fetchAllUsers,
+  removeTeacherFromUser,
+} from '../../api';
 import { Person, School, VerifiedUser } from '@mui/icons-material';
 import { AxiosResponse } from 'axios';
 import { AxiosError } from 'axios';
@@ -19,7 +24,7 @@ import { roleToString } from '../../utils/role';
 export const UsersList = () => {
   const { data, isLoading, refetch } = useQuery('users', () => fetchAllUsers());
 
-  const { mutate } = useMutation(
+  const { mutate: assignTeacher } = useMutation(
     (user: FullUser) => assignUserToTeacher(user),
     {
       onError: (error: AxiosError) => {
@@ -36,9 +41,30 @@ export const UsersList = () => {
       },
     }
   );
+  const { mutate: removeTeacher } = useMutation(
+    (user: FullUser) => removeTeacherFromUser(user),
+    {
+      onError: (error: AxiosError) => {
+        if (error?.response?.status === 409) {
+          alert('Stale data, refreshing the data...');
+          refetch();
+        }
+      },
+      onSuccess: (response: AxiosResponse) => {
+        if (response.status === 200) {
+          alert('User removed as teacher successfully!');
+          refetch();
+        }
+      },
+    }
+  );
 
   const onClickAssignTeacher = (user: FullUser) => {
-    mutate(user);
+    assignTeacher(user);
+  };
+
+  const onClickRemoveTeacher = (user: FullUser) => {
+    removeTeacher(user);
   };
 
   return isLoading ? (
@@ -56,11 +82,19 @@ export const UsersList = () => {
               user.role.type === 'USER' ? (
                 <ListItemButton
                   onClick={() => onClickAssignTeacher(user)}
-                  color="green"
                   sx={{ textAlign: 'right' }}
                 >
                   <Button color="success" variant="outlined">
                     Assign teacher
+                  </Button>
+                </ListItemButton>
+              ) : user.role.type === 'TEACHER' ? (
+                <ListItemButton
+                  onClick={() => onClickRemoveTeacher(user)}
+                  sx={{ textAlign: 'right' }}
+                >
+                  <Button color="error" variant="outlined">
+                    Remove teacher
                   </Button>
                 </ListItemButton>
               ) : null
