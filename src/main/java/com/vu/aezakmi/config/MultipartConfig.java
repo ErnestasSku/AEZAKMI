@@ -1,4 +1,4 @@
-package com.vu.aezakmi.utils;
+package com.vu.aezakmi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

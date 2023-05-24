@@ -1,4 +1,4 @@
-package com.vu.aezakmi.utils;
+package com.vu.aezakmi.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {
