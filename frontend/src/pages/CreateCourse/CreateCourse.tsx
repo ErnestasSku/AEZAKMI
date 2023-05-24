@@ -107,82 +107,84 @@ const CreateCourse = withPrivateRoute(() => {
               />
             )}
           />
-          <Controller
-            control={control}
-            name="videoIds"
-            render={({ field: { onChange, value } }) =>
-              isLoadingUserVideos ? (
-                <div>Loading videos...</div>
-              ) : (
-                <>
-                  <FormControl>
-                    <Paper
-                      elevation={4}
-                      style={{
-                        maxHeight: '400px',
-                        overflowY: 'scroll',
-                        marginTop: '0px',
-                      }}
-                    >
-                      <List>
-                        {userVideosData?.data.map(video => (
-                          <ListItem
-                            key={video.id}
-                            disablePadding
-                            secondaryAction={
-                              <Link
-                                target="_blank"
-                                to={`/videos/${video.id}`}
-                                state={{ video }}
-                                onClick={() => saveVideoToStorage(video)}
-                              >
-                                <IconButton
-                                  style={{
-                                    borderRadius: '2px',
-                                    paddingRight: '20px',
-                                  }}
-                                  size="small"
+          {isLoadingUserVideos || !!userVideosData?.data.length ? (
+            <Controller
+              control={control}
+              name="videoIds"
+              render={({ field: { onChange, value } }) =>
+                isLoadingUserVideos ? (
+                  <div>Loading videos...</div>
+                ) : (
+                  <>
+                    <FormControl>
+                      <Paper
+                        elevation={4}
+                        style={{
+                          maxHeight: '400px',
+                          overflowY: 'scroll',
+                          marginTop: '0px',
+                        }}
+                      >
+                        <List>
+                          {userVideosData?.data.map(video => (
+                            <ListItem
+                              key={video.id}
+                              disablePadding
+                              secondaryAction={
+                                <Link
+                                  target="_blank"
+                                  to={`/videos/${video.id}`}
+                                  state={{ video }}
+                                  onClick={() => saveVideoToStorage(video)}
                                 >
-                                  <Stack
-                                    direction="row"
-                                    alignItems="center"
-                                    spacing={1}
+                                  <IconButton
+                                    style={{
+                                      borderRadius: '2px',
+                                      paddingRight: '20px',
+                                    }}
+                                    size="small"
                                   >
-                                    <Launch />
-                                    <div>Go to video</div>
-                                  </Stack>
-                                </IconButton>
-                              </Link>
-                            }
-                          >
-                            <ListItemButton
-                              style={{ padding: '16px' }}
-                              onClick={() => {
-                                onChange(
-                                  value?.includes(video.id)
-                                    ? value?.filter(id => id !== video.id)
-                                    : [...(value ?? []), video.id]
-                                );
-                              }}
+                                    <Stack
+                                      direction="row"
+                                      alignItems="center"
+                                      spacing={1}
+                                    >
+                                      <Launch />
+                                      <div>Go to video</div>
+                                    </Stack>
+                                  </IconButton>
+                                </Link>
+                              }
                             >
-                              <Checkbox checked={value?.includes(video.id)} />
-                              <div>{video.title}</div>
-                            </ListItemButton>
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Paper>
-                  </FormControl>
+                              <ListItemButton
+                                style={{ padding: '16px' }}
+                                onClick={() => {
+                                  onChange(
+                                    value?.includes(video.id)
+                                      ? value?.filter(id => id !== video.id)
+                                      : [...(value ?? []), video.id]
+                                  );
+                                }}
+                              >
+                                <Checkbox checked={value?.includes(video.id)} />
+                                <div>{video.title}</div>
+                              </ListItemButton>
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Paper>
+                    </FormControl>
 
-                  <FormHelperText
-                    style={{ marginTop: '6px', marginLeft: '12px' }}
-                  >
-                    Select videos to include in your course
-                  </FormHelperText>
-                </>
-              )
-            }
-          />
+                    <FormHelperText
+                      style={{ marginTop: '6px', marginLeft: '12px' }}
+                    >
+                      Select videos to include in your course
+                    </FormHelperText>
+                  </>
+                )
+              }
+            />
+          ) : null}
           <Button
             type="submit"
             variant="contained"
