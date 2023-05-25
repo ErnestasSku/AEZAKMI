@@ -1,5 +1,6 @@
 import { createContext, useEffect, useMemo, useState } from 'react';
 import { LoggedInUser } from '../api';
+import { noop } from 'lodash';
 
 interface IAuthContext {
   token: string | null;
@@ -10,9 +11,9 @@ interface IAuthContext {
 
 export const AuthContext = createContext<IAuthContext>({
   token: null,
-  setToken: () => {},
+  setToken: noop,
   user: null,
-  setUser: () => {},
+  setUser: noop,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
