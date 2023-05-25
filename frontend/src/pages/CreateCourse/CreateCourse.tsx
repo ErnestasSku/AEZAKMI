@@ -14,7 +14,7 @@ import {
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
 import { useAuth } from '../../hooks/useAuth';
-import { VideoPreview, createCourse, fetchAllVideoPreviews } from '../../api';
+import { createCourse, fetchAllVideoPreviews } from '../../api';
 import { Add, Launch } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -45,10 +45,6 @@ const CreateCourse = withPrivateRoute(() => {
 
   const onSubmit = (data: FormData) => {
     mutate(data);
-  };
-
-  const saveVideoToStorage = (video: VideoPreview) => {
-    localStorage.setItem('video', JSON.stringify(video));
   };
 
   useEffect(() => {
@@ -134,8 +130,6 @@ const CreateCourse = withPrivateRoute(() => {
                                 <Link
                                   target="_blank"
                                   to={`/videos/${video.id}`}
-                                  state={{ video }}
-                                  onClick={() => saveVideoToStorage(video)}
                                 >
                                   <IconButton
                                     style={{
