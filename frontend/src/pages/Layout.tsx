@@ -133,7 +133,7 @@ const Layout: React.FC = () => {
             gap: '30px',
           }}
         >
-          {user?.role != 'USER' && (
+          {user?.role == 'TEACHER' && (
             <>
               <Link to={'/courses/create'}>
                 <Button

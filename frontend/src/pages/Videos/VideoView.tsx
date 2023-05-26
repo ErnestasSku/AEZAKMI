@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   Course,
   Creator,
   LoggedInUser,
-  VideoPreview,
   fetchUserCourses,
+  fetchVideo,
   fetchVideoBlob,
   updateVideoCourse,
 } from '../../api';
@@ -15,6 +15,7 @@ import {
   Avatar,
   Button,
   Card,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -32,23 +33,23 @@ import { PageHeader } from '../../components/PageHeader';
 
 export const VideoView = withPrivateRoute(() => {
   const { user } = useAuth();
-  const { id = '' } = useParams<{ id: string }>();
-  const { data: blob } = useQuery(`video-blob-${id}`, () => fetchVideoBlob(id));
-  const [videoUrl, setVideoUrl] = useState('');
-  const { state }: { state?: { video: VideoPreview } } = useLocation();
-  const [video, setVideo] = useState<VideoPreview>(
-    state?.video || JSON.parse(localStorage.getItem('video') || '')
+  const { id: videoId = '' } = useParams<{ id: string }>();
+  const { data: blob } = useQuery(`video-blob-${videoId}`, () =>
+    fetchVideoBlob(videoId)
   );
+  const [videoUrl, setVideoUrl] = useState('');
+  const { data: videoData, refetch } = useQuery(['video', videoId], () =>
+    fetchVideo(videoId)
+  );
+  const video = videoData?.data;
   const { mutate } = useMutation((courseId?: string) =>
-    updateVideoCourse(video.id, courseId)
+    updateVideoCourse(videoId, courseId)
   );
   const ref = useRef<HTMLVideoElement>(null);
-  const navigate = useNavigate();
 
   const updateCourse = (course: Course | null) => {
-    setVideo({ ...video, course });
-    mutate(course?.id.toString());
-    navigate(`/videos/${video.id}`, { state: { video: { ...video, course } } });
+    mutate(course?.id.toString(), { onSuccess: () => refetch() });
+    refetch();
   };
 
   useEffect(() => {
@@ -63,10 +64,22 @@ export const VideoView = withPrivateRoute(() => {
     }
   }, [videoUrl]);
 
-  return !videoUrl ? (
-    <div>Loading...</div>
+  return !videoUrl || !video ? (
+    <div
+      style={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <CircularProgress />
+    </div>
   ) : (
-    <Stack sx={{ marginX: 'auto', padding: '60px' }} maxWidth={'1300px'}>
+    <Stack
+      sx={{ marginX: 'auto', paddingX: '60px', paddingBottom: '20px' }}
+      maxWidth={'1300px'}
+    >
       {video.course && (
         <PageHeader showVideosCount showViewAll course={video.course} />
       )}
@@ -154,7 +167,7 @@ const AssignToCourse = ({
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { data: userCoursesData } = useQuery(`user-courses-${user!.id}`, () =>
-    fetchUserCourses(user!.id)
+    fetchUserCourses(user.id)
   );
 
   const onDialogClose = () => {
